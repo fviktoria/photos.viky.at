@@ -40,11 +40,11 @@
 
 ## 5. Homepage Integration
 
-- [ ] 5.1 Update homepage hero section with Viky's photographer introduction text
-- [ ] 5.2 Add SEO keywords to hero: "Photographer Vienna", "Event Photography Vienna", etc.
-- [ ] 5.3 Create or update navigation menu with Portfolio, About, Contact links
-- [ ] 5.4 Integrate portfolio section into homepage (partial/preview or full grid)
-- [ ] 5.5 Ensure responsive design on mobile, tablet, desktop
+- [x] 5.1 Update homepage hero section with Viky's photographer introduction text
+- [x] 5.2 Add SEO keywords to hero: "Photographer Vienna", "Event Photography Vienna", etc.
+- [x] 5.3 Create or update navigation menu with Portfolio, About, Contact links
+- [x] 5.4 Integrate portfolio section into homepage (partial/preview or full grid)
+- [x] 5.5 Ensure responsive design on mobile, tablet, desktop
 
 ## 6. SEO Optimization
 
