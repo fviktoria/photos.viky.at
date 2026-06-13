@@ -1,6 +1,6 @@
 ## 1. Setup & Dependencies
 
-- [ ] 1.1 Add required dependencies: photoswipe, astro-seo (or equivalent SEO integration)
+- [x] 1.1 Add required dependencies: photoswipe, astro-seo (or equivalent SEO integration)
 - [ ] 1.2 Create Content Collections config (`src/content/config.ts`) with Zod schemas
 - [ ] 1.3 Define Photo collection schema with required/optional fields and validation
 - [ ] 1.4 Define Album collection schema with required/optional fields and validation
