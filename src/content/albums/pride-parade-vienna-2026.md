@@ -1,0 +1,9 @@
+---
+title: Pride Parade Vienna 2026
+description: Documentary coverage of the Vienna Pride Parade 2026.
+tags:
+  - Documentary
+  - Events
+location: Vienna, Austria
+date: 2026-06-14
+---

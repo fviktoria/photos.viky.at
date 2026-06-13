@@ -9,12 +9,12 @@
 
 ## 2. Content Model & Infrastructure
 
-- [ ] 2.1 Create utility function for metadata inheritance (photos inherit from albums)
-- [ ] 2.2 Create utility to fetch and aggregate all tags from photo and album content
-- [ ] 2.3 Create utility to fetch photos by tag with inheritance rules
-- [ ] 2.4 Create utility to fetch album with contained photos
-- [ ] 2.5 Add type definitions and exports from `src/content/config.ts`
-- [ ] 2.6 Create sample photo and album content files for testing
+- [x] 2.1 Create utility function for metadata inheritance (photos inherit from albums)
+- [x] 2.2 Create utility to fetch and aggregate all tags from photo and album content
+- [x] 2.3 Create utility to fetch photos by tag with inheritance rules
+- [x] 2.4 Create utility to fetch album with contained photos
+- [x] 2.5 Add type definitions and exports from `src/content/config.ts`
+- [x] 2.6 Create sample photo and album content files for testing
 
 ## 3. Components - Core Gallery UI
 
