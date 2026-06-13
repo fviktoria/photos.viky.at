@@ -18,14 +18,14 @@
 
 ## 3. Components - Core Gallery UI
 
-- [ ] 3.1 Create `PhotoCard.astro` component for masonry grid items with lazy-loaded images
-- [ ] 3.2 Implement image optimization using Astro Image component (AVIF/WebP fallback)
-- [ ] 3.3 Create `PhotoGrid.astro` component for masonry layout with Tailwind CSS Grid
-- [ ] 3.4 Create `TagFilter.astro` component for tag-based filtering UI
-- [ ] 3.5 Create `Lightbox.astro` component with PhotoSwipe integration
-- [ ] 3.6 Implement PhotoSwipe initialization and configuration (metadata overlay, navigation)
-- [ ] 3.7 Add lightbox metadata display (title, description, location, date)
-- [ ] 3.8 Create `PortfolioSection.astro` combining grid + filters + lightbox
+- [x] 3.1 Create `PhotoCard.astro` component for masonry grid items with lazy-loaded images
+- [x] 3.2 Implement image optimization using Astro Image component (AVIF/WebP fallback)
+- [x] 3.3 Create `PhotoGrid.astro` component for masonry layout with Tailwind CSS Grid
+- [x] 3.4 Create `TagFilter.astro` component for tag-based filtering UI
+- [x] 3.5 Create `Lightbox.astro` component with PhotoSwipe integration
+- [x] 3.6 Implement PhotoSwipe initialization and configuration (metadata overlay, navigation)
+- [x] 3.7 Add lightbox metadata display (title, description, location, date)
+- [x] 3.8 Create `PortfolioSection.astro` combining grid + filters + lightbox
 
 ## 4. Pages - Portfolio & Albums
 

@@ -1,0 +1,59 @@
+---
+interface Props {
+  galleryId?: string;
+}
+
+const { galleryId = 'portfolio-gallery' } = Astro.props;
+---
+
+<!-- Config element read by the client script -->
+<div id="pswp-config" data-gallery-id={galleryId} class="hidden"></div>
+
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  import 'photoswipe/style.css';
+
+  const configEl = document.getElementById('pswp-config');
+  const galleryId = configEl?.dataset.galleryId ?? 'portfolio-gallery';
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: `#${galleryId}`,
+    children: 'a.photo-card',
+    pswpModule: () => import('photoswipe'),
+    showHideAnimationType: 'zoom',
+  });
+
+  // 3.7: Metadata overlay — title, description, location, date
+  lightbox.on('uiRegister', function () {
+    lightbox.pswp!.ui!.registerElement({
+      name: 'photo-caption',
+      order: 9,
+      isButton: false,
+      appendTo: 'wrapper',
+      onInit(el, pswp) {
+        el.classList.add('pswp__photo-caption');
+
+        pswp.on('change', () => {
+          const a = pswp.currSlide?.data?.element as HTMLAnchorElement | undefined;
+          if (!a) { el.innerHTML = ''; return; }
+
+          const title = a.dataset.pswpTitle ?? '';
+          const description = a.dataset.pswpDescription ?? '';
+          const location = a.dataset.pswpLocation ?? '';
+          const date = a.dataset.pswpDate ?? '';
+          const meta = [location, date].filter(Boolean).join(' · ');
+
+          el.innerHTML = [
+            title ? `<strong>${title}</strong>` : '',
+            description ? `<p>${description}</p>` : '',
+            meta ? `<small>${meta}</small>` : '',
+          ]
+            .filter(Boolean)
+            .join('');
+        });
+      },
+    });
+  });
+
+  lightbox.init();
+</script>

@@ -1,0 +1,25 @@
+---
+import type { ResolvedPhoto } from '../lib/content';
+import PhotoGrid from './PhotoGrid.astro';
+import TagFilter from './TagFilter.astro';
+import Lightbox from './Lightbox.astro';
+
+interface Props {
+  photos: ResolvedPhoto[];
+  tags: string[];
+}
+
+const { photos, tags } = Astro.props;
+
+const GALLERY_ID = 'portfolio-gallery';
+---
+
+<section aria-label="Photography portfolio">
+  {
+    tags.length > 0 && (
+      <TagFilter tags={tags} class="mb-8" />
+    )
+  }
+  <PhotoGrid photos={photos} id={GALLERY_ID} />
+  <Lightbox galleryId={GALLERY_ID} />
+</section>

@@ -1,0 +1,37 @@
+---
+import type { ResolvedPhoto } from '../lib/content';
+
+interface Props {
+  photo: ResolvedPhoto;
+}
+
+const { photo } = Astro.props;
+
+const alt = [photo.title, photo.location].filter(Boolean).join(' – ');
+
+const dateStr = photo.date
+  ? photo.date.toLocaleDateString('en-AT', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : '';
+---
+
+<a
+  href={photo.image}
+  class="photo-card block mb-4 break-inside-avoid overflow-hidden rounded-sm group cursor-zoom-in"
+  data-tags={photo.tags.join(',')}
+  data-pswp-title={photo.title}
+  data-pswp-description={photo.description ?? ''}
+  data-pswp-location={photo.location ?? ''}
+  data-pswp-date={dateStr}
+>
+  <img
+    src={photo.image}
+    alt={alt}
+    loading="lazy"
+    decoding="async"
+    class="w-full object-cover transition-opacity duration-200 group-hover:opacity-90"
+  />
+</a>
