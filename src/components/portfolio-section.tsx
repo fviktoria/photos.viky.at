@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { FC, useState } from "react";
 import type { ResolvedPhoto } from "@/lib/content";
-import PhotoGrid from "./PhotoGrid";
-import TagFilter from "./TagFilter";
-import Lightbox from "./Lightbox";
+import { PhotoGrid } from "./photo-grid";
+import { TagFilter } from "./tag-filter";
+import { Lightbox } from "./light-box";
 
 const GALLERY_ID = "portfolio-gallery";
 
@@ -13,7 +13,7 @@ interface Props {
   tags: string[];
 }
 
-export default function PortfolioSection({ photos, tags }: Props) {
+export const PortfolioSection: FC<Props> = ({ photos, tags }) => {
   const [activeTag, setActiveTag] = useState("all");
 
   const filtered =
@@ -30,4 +30,4 @@ export default function PortfolioSection({ photos, tags }: Props) {
       <Lightbox galleryId={GALLERY_ID} />
     </section>
   );
-}
+};

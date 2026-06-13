@@ -1,12 +1,13 @@
 import Image from "next/image";
 import type { ResolvedPhoto } from "@/lib/content";
+import { FC } from "react";
 
 interface Props {
   photo: ResolvedPhoto;
   priority?: boolean;
 }
 
-export default function PhotoCard({ photo, priority = false }: Props) {
+export const PhotoCard: FC<Props> = ({ photo, priority = false }) => {
   const descExcerpt = photo.description
     ? photo.description.slice(0, 60).trimEnd()
     : "";
@@ -47,4 +48,4 @@ export default function PhotoCard({ photo, priority = false }: Props) {
       />
     </a>
   );
-}
+};

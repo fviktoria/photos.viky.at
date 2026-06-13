@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";
 
@@ -8,7 +8,7 @@ interface Props {
   galleryId: string;
 }
 
-export default function Lightbox({ galleryId }: Props) {
+export const Lightbox: FC<Props> = ({ galleryId }) => {
   useEffect(() => {
     const lightbox = new PhotoSwipeLightbox({
       gallery: `#${galleryId}`,
@@ -55,4 +55,4 @@ export default function Lightbox({ galleryId }: Props) {
   }, [galleryId]);
 
   return null;
-}
+};

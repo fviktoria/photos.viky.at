@@ -1,3 +1,5 @@
+import { FC } from "react";
+
 interface Props {
   tags: string[];
   activeTag: string;
@@ -10,7 +12,7 @@ const active = "bg-neutral-900 text-white border-neutral-900";
 const inactive =
   "border-neutral-300 text-neutral-700 hover:bg-neutral-900 hover:text-white";
 
-export default function TagFilter({ tags, activeTag, onFilter }: Props) {
+export const TagFilter: FC<Props> = ({ tags, activeTag, onFilter }) => {
   return (
     <div
       className="flex flex-wrap gap-2 mb-8"
@@ -36,4 +38,4 @@ export default function TagFilter({ tags, activeTag, onFilter }: Props) {
       ))}
     </div>
   );
-}
+};

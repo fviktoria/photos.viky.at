@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import PhotoGrid from "@/components/PhotoGrid";
-import Lightbox from "@/components/Lightbox";
+import { PhotoGrid } from "@/components/photo-grid";
+import { Lightbox } from "@/components/light-box";
 import { getAlbumIds, getAlbumWithPhotos } from "@/lib/content";
 
 interface Props {

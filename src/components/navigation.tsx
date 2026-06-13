@@ -1,5 +1,6 @@
 "use client";
 
+import { FC } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -9,12 +10,11 @@ const links = [
   { href: "/contact", label: "Contact" },
 ];
 
-export default function Nav() {
+export const Nav: FC = () => {
   const pathname = usePathname();
 
-  function isActive(href: string) {
-    return pathname === href || (href !== "/" && pathname.startsWith(href));
-  }
+  const isActive = (href: string) =>
+    pathname === href || (href !== "/" && pathname.startsWith(href));
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-neutral-100">
@@ -48,4 +48,4 @@ export default function Nav() {
       </nav>
     </header>
   );
-}
+};

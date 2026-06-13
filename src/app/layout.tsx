@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/global.css";
-import Nav from "@/components/Nav";
+import { Nav } from "@/components/navigation";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://photos.viky.at"),

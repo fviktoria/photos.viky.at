@@ -1,12 +1,13 @@
+import { FC } from "react";
 import type { ResolvedPhoto } from "@/lib/content";
-import PhotoCard from "./PhotoCard";
+import { PhotoCard } from "./photo-card";
 
 interface Props {
   photos: ResolvedPhoto[];
   id?: string;
 }
 
-export default function PhotoGrid({ photos, id = "portfolio-gallery" }: Props) {
+export const PhotoGrid: FC<Props> = ({ photos, id = "portfolio-gallery" }) => {
   return (
     <div
       id={id}
@@ -18,4 +19,4 @@ export default function PhotoGrid({ photos, id = "portfolio-gallery" }: Props) {
       ))}
     </div>
   );
-}
+};

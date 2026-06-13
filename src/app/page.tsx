@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import PortfolioSection from "@/components/PortfolioSection";
+import { PortfolioSection } from "@/components/portfolio-section";
 import { getAllResolvedPhotos, getAllTags } from "@/lib/content";
 
 export const metadata: Metadata = {
