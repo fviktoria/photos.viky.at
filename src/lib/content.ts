@@ -1,7 +1,41 @@
-import { getCollection, getEntry } from 'astro:content';
-import type { AlbumData, PhotoData } from '../content.config';
+import { readdirSync, readFileSync } from 'fs';
+import { join } from 'path';
 
-// 2.1: Resolved photo type with inherited metadata applied
+// ── Raw JSON shapes ──────────────────────────────────────────────────────────
+
+export interface PhotoData {
+  title: string;
+  image: string;
+  description?: string;
+  tags: string[];
+  location?: string;
+  date?: string;
+  album?: string;
+}
+
+export interface AlbumData {
+  title: string;
+  description: string;
+  tags: string[];
+  location?: string;
+  date?: string;
+  cover?: string;
+}
+
+// ── Parsed entries (dates coerced to Date) ───────────────────────────────────
+
+export interface PhotoEntry extends Omit<PhotoData, 'date'> {
+  id: string;
+  date?: Date;
+}
+
+export interface AlbumEntry extends Omit<AlbumData, 'date'> {
+  id: string;
+  date?: Date;
+}
+
+// ── Resolved photo with album inheritance applied ────────────────────────────
+
 export interface ResolvedPhoto {
   id: string;
   title: string;
@@ -11,79 +45,81 @@ export interface ResolvedPhoto {
   location: string | undefined;
   date: Date | undefined;
   album: string | undefined;
-  albumData: AlbumData | undefined;
+  albumData: AlbumEntry | undefined;
 }
 
-// 2.1: Apply album metadata inheritance to a single photo
-export async function resolvePhotoInheritance(
-  id: string,
-  data: PhotoData,
-): Promise<ResolvedPhoto> {
-  let albumData: AlbumData | undefined;
+// ── Readers ──────────────────────────────────────────────────────────────────
 
-  if (data.album) {
-    const entry = await getEntry('albums', data.album);
-    albumData = entry?.data;
-  }
+const contentDir = join(process.cwd(), 'content');
 
+function readJson<T>(filePath: string): T {
+  return JSON.parse(readFileSync(filePath, 'utf-8')) as T;
+}
+
+export function getPhotos(): PhotoEntry[] {
+  const dir = join(contentDir, 'photos');
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.json'))
+    .map((file) => {
+      const raw = readJson<PhotoData>(join(dir, file));
+      return { ...raw, id: file.replace('.json', ''), date: raw.date ? new Date(raw.date) : undefined };
+    });
+}
+
+export function getAlbums(): AlbumEntry[] {
+  const dir = join(contentDir, 'albums');
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.json'))
+    .map((file) => {
+      const raw = readJson<AlbumData>(join(dir, file));
+      return { ...raw, id: file.replace('.json', ''), date: raw.date ? new Date(raw.date) : undefined };
+    });
+}
+
+export function getAlbumIds(): string[] {
+  return readdirSync(join(contentDir, 'albums'))
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => f.replace('.json', ''));
+}
+
+// ── Inheritance ──────────────────────────────────────────────────────────────
+
+function resolvePhoto(photo: PhotoEntry, albums: AlbumEntry[]): ResolvedPhoto {
+  const albumData = photo.album ? albums.find((a) => a.id === photo.album) : undefined;
   return {
-    id,
-    title: data.title,
-    image: data.image,
-    // description, location, date fall back to album values when absent
-    description: data.description ?? albumData?.description,
-    // tags are merged: album tags first, then photo-specific tags
-    tags: [...(albumData?.tags ?? []), ...data.tags],
-    location: data.location ?? albumData?.location,
-    date: data.date ?? albumData?.date,
-    album: data.album,
+    id: photo.id,
+    title: photo.title,
+    image: photo.image,
+    description: photo.description ?? albumData?.description,
+    // album tags first, then photo-specific tags
+    tags: [...(albumData?.tags ?? []), ...photo.tags],
+    location: photo.location ?? albumData?.location,
+    date: photo.date ?? albumData?.date,
+    album: photo.album,
     albumData,
   };
 }
 
-// 2.2: Aggregate all unique tags from photos and albums
-export async function getAllTags(): Promise<string[]> {
-  const [photos, albums] = await Promise.all([
-    getCollection('photos'),
-    getCollection('albums'),
-  ]);
+// ── Public API ───────────────────────────────────────────────────────────────
 
+export function getAllResolvedPhotos(): ResolvedPhoto[] {
+  const albums = getAlbums();
+  return getPhotos().map((p) => resolvePhoto(p, albums));
+}
+
+export function getAllTags(): string[] {
   const tags = new Set<string>();
-  for (const p of photos) p.data.tags.forEach((t) => tags.add(t));
-  for (const a of albums) a.data.tags.forEach((t) => tags.add(t));
-
+  getPhotos().forEach((p) => p.tags.forEach((t) => tags.add(t)));
+  getAlbums().forEach((a) => a.tags.forEach((t) => tags.add(t)));
   return [...tags].sort();
 }
 
-// 2.3: Fetch photos by tag, respecting inheritance rules
-export async function getPhotosByTag(tag: string): Promise<ResolvedPhoto[]> {
-  const photos = await getCollection('photos');
-  const resolved = await Promise.all(
-    photos.map((p) => resolvePhotoInheritance(p.id, p.data)),
-  );
-  return resolved.filter((p) => p.tags.includes(tag));
-}
-
-// 2.4: Fetch album with all contained photos
-export async function getAlbumWithPhotos(slug: string) {
-  const albumEntry = await getEntry('albums', slug);
-  if (!albumEntry) return null;
-
-  const photos = await getCollection('photos');
-  const contained = photos.filter((p) => p.data.album === slug);
-  const resolvedPhotos = await Promise.all(
-    contained.map((p) => resolvePhotoInheritance(p.id, p.data)),
-  );
-
-  return {
-    id: albumEntry.id,
-    data: albumEntry.data,
-    photos: resolvedPhotos,
-  };
-}
-
-// Convenience: all photos with inheritance applied
-export async function getAllResolvedPhotos(): Promise<ResolvedPhoto[]> {
-  const photos = await getCollection('photos');
-  return Promise.all(photos.map((p) => resolvePhotoInheritance(p.id, p.data)));
+export function getAlbumWithPhotos(slug: string) {
+  const albums = getAlbums();
+  const album = albums.find((a) => a.id === slug);
+  if (!album) return null;
+  const photos = getPhotos()
+    .filter((p) => p.album === slug)
+    .map((p) => resolvePhoto(p, albums));
+  return { data: album, photos };
 }

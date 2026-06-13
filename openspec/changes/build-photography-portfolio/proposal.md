@@ -4,11 +4,10 @@ Building a professional photography portfolio requires a fast, SEO-optimized sta
 
 ## What Changes
 
-- Creates Astro-based static site generator for photography portfolio
-- Implements content collections system for photos and albums with metadata inheritance
+- Creates Next.js 15 App Router static site (`output: 'export'`) for photography portfolio
+- Implements JSON-based content model for photos and albums with metadata inheritance
 - Adds masonry grid layout with tag-based filtering on homepage portfolio
 - Implements PhotoSwipe lightbox for image viewing with metadata display
-- Adds Astro Image optimization for fast image delivery
 - Implements SEO features: Open Graph, structured data, sitemaps, canonical URLs
 - Creates album pages for narrative-based browsing (/albums/[slug])
 - Establishes Git-based content management without CMS
@@ -25,8 +24,8 @@ Building a professional photography portfolio requires a fast, SEO-optimized sta
 
 ## Impact
 
-- Affects: Site architecture, routing, content organization (src/content, public/images)
-- Dependencies: Astro, TypeScript, Tailwind CSS, PhotoSwipe, Astro Image, Astro Content Collections
-- New configuration: Content collection schemas for photos and albums
-- Build pipeline: Static generation with image optimization
+- Affects: Site architecture, routing, content organization (content/, public/images, src/)
+- Dependencies: Next.js 15, React 19, TypeScript, Tailwind CSS v4, PhotoSwipe v5
+- New configuration: TypeScript interfaces in `src/lib/content.ts`; JSON files in `content/`
+- Build pipeline: Static generation via `next build` with `output: 'export'`
 - Deployment: Vercel or Cloudflare Pages compatible

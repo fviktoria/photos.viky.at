@@ -1,11 +1,11 @@
 ## Context
 
-This is a personal photography portfolio for Viky (Vienna, Austria) built as a static site. The current state includes basic Astro setup but no content collections, portfolio UI, or gallery functionality. The project uses Git as source of truth for content without a CMS.
+This is a personal photography portfolio for Viky (Vienna, Austria) built as a static site. The project uses Git as source of truth for content without a CMS. Originally started with Astro; **rewritten to Next.js 15 (App Router)** after initial implementation.
 
 Key constraints:
 - Must be fast and SEO-optimized
 - Static generation preferred (no runtime overhead)
-- Content managed in Git (markdown files)
+- Content managed in Git (JSON files in `content/`)
 - Support for large image collections
 - Responsive design for mobile-first viewing
 
@@ -28,32 +28,33 @@ Key constraints:
 
 ## Decisions
 
-### 1. Static Site Generation with Astro
-**Decision**: Use Astro's SSG capabilities exclusively, no SSR routes.
-**Rationale**: Astro is optimized for static generation, provides excellent image optimization, and generates fast HTML. Perfect for image-heavy portfolio sites.
-**Alternatives Considered**: 
-- Next.js: Overkill for static portfolio, unnecessary JavaScript overhead
+### 1. Static Site Generation with Next.js
+**Decision**: Use Next.js 15 App Router with `output: 'export'` for fully static HTML generation.
+**Rationale**: Next.js provides a familiar React ecosystem, excellent TypeScript support, built-in Metadata API for SEO, and static export works with Vercel, Cloudflare Pages, and any CDN. Switched from Astro after initial implementation.
+**Alternatives Considered**:
+- Astro: Initially used; replaced due to developer preference for React
 - Hugo: Lower-level templating, less TypeScript integration
 - Plain HTML: No content model or automation
 
-### 2. Content Collections for Schema Validation
-**Decision**: Use Astro Content Collections API to define Photo and Album schemas.
-**Rationale**: Provides type-safe frontmatter validation, enables programmatic access, and prevents invalid content structures.
+### 2. JSON Files for Content
+**Decision**: Store photo and album metadata as JSON files in `content/photos/` and `content/albums/`. File slug is derived from the filename.
+**Rationale**: Simple, fast to parse (no YAML/markdown parser needed), type-safe with TypeScript interfaces, git-friendly. `src/lib/content.ts` reads files with Node.js `fs` at build time.
 **Alternatives Considered**:
-- Plain markdown with custom parsing: More flexible but fragile, requires manual validation
+- Markdown with YAML frontmatter: Good for prose-heavy content; unnecessary for structured metadata
+- Astro Content Collections: Astro-specific, not portable
 - Headless CMS: Violates Git-as-source-of-truth requirement
 
-### 3. Markdown Files with YAML Frontmatter for Content
-**Decision**: Store photos and albums as markdown files in `src/content/` with YAML frontmatter for metadata.
-**Rationale**: Git-friendly, version control friendly, no database required, markdown descriptions enable rich content.
-**Alternative**: JSON files - less expressive for descriptions, less human-readable in version control
+### 3. TypeScript Interfaces for Content Validation
+**Decision**: Content shape is enforced via TypeScript interfaces (`PhotoData`, `AlbumData`) in `src/lib/content.ts`.
+**Rationale**: Zero runtime overhead, IDE autocompletion when editing content functions, no extra dependency.
+**Alternative**: Zod schema validation at read time — adds runtime safety but adds dependency and complexity for author-controlled content.
 
 ### 4. Image Storage in public/images/
 **Decision**: Store all image files in `public/images/` directory as static assets, referenced by filename in content.
-**Rationale**: Simple, static, no build-time processing needed for images themselves (Astro Image handles optimization at build time).
+**Rationale**: Simple, static, no build-time processing needed for images themselves. `next/image` can optimize images served from `public/` when deployed to Vercel.
 **Alternatives Considered**:
 - Hosted CDN: Adds external dependency, complicates Git-based workflow
-- Build-time image processing: Already handled by Astro Image component
+- `src/assets/` with import: Requires knowing file paths at compile time, less flexible
 
 ### 5. Metadata Inheritance for DRY Content
 **Decision**: Implement inheritance rules where photos inherit from albums (description, tags, location, date) when fields are omitted.
@@ -62,7 +63,7 @@ Key constraints:
 
 ### 6. Masonry Grid with Tailwind CSS
 **Decision**: Use Tailwind CSS Grid and custom masonry layout for portfolio display.
-**Rationale**: Modern, responsive, minimal custom CSS, integrates well with Astro.
+**Rationale**: Modern, responsive, minimal custom CSS, integrates well with Next.js via `@tailwindcss/postcss`.
 **Alternatives Considered**:
 - CSS Columns: Less control over item sizing
 - JavaScript-based masonry: Unnecessary complexity for static content
@@ -75,65 +76,64 @@ Key constraints:
 - Swipebox: Smaller but fewer features
 - Custom lightbox: Significant development effort
 
-### 8. Dynamic Album Pages with Astro Dynamic Routes
-**Decision**: Generate `/albums/[slug]` pages dynamically from album collection.
-**Rationale**: Astro's dynamic routes handle this automatically with minimal boilerplate, enables narrative browsing.
-**Alternative**: Static pre-generation - requires manual route definition
+### 8. Dynamic Album Pages with Next.js App Router
+**Decision**: Generate `/albums/[slug]` pages via `generateStaticParams` from the album JSON files.
+**Rationale**: Next.js handles static param generation reliably; pages are pre-rendered at build time as static HTML.
+**Alternative**: Manual route definition — not scalable as album count grows
 
-### 9. SEO via Astro Integrations and Manual Markup
-**Decision**: Use Astro's built-in head management + astro-seo integration for Open Graph + JSON-LD structured data for schema markup.
-**Rationale**: Astro provides helpers for managing head tags, integrations reduce boilerplate, schema.org structured data improves search visibility.
+### 9. SEO via Next.js Metadata API
+**Decision**: Use Next.js built-in `Metadata` export and `generateMetadata` for Open Graph + canonical URLs + JSON-LD via `dangerouslySetInnerHTML`.
+**Rationale**: No extra dependencies; Next.js Metadata API handles `<head>` injection correctly for static export. JSON-LD is rendered as an inline `<script>` tag.
 **Alternatives Considered**:
-- Headless SEO service: Adds dependency, unnecessary complexity
-- Manual markup: Works but error-prone and maintenance-heavy
+- `next-seo` package: Extra dependency, Next.js Metadata API covers the same ground
+- `astro-seo`: Astro-specific, not applicable
 
 ### 10. Tag System with Unlimited Extensibility
-**Decision**: Tags defined as YAML array in content, no hardcoded tag list. UI generates tags from all content.
+**Decision**: Tags defined as JSON array in content, no hardcoded tag list. UI generates tags from all content.
 **Rationale**: Allows unlimited future tags without code changes. Initial UI shows common tags but system supports any tag.
-**Implementation**: Aggregate all tags from content at build time, generate filter options dynamically.
+**Implementation**: Aggregate all tags from content at build time via `getAllTags()`, pass to `PortfolioSection` for client-side filter state.
 
 ### 11. Lazy Loading for Images
-**Decision**: Use Astro Image component with `loading="lazy"` attribute for masonry grid images.
-**Rationale**: Improves page load performance, especially for mobile. Astro Image handles format optimization (AVIF/WebP fallback).
-**Alternative**: Eager loading - unnecessary overhead for above-the-fold images in masonry
+**Decision**: Images rendered with plain `<img>` tags; lazy loading to be addressed in task 7.3 using `next/image` or native `loading="lazy"`.
+**Rationale**: Initial implementation prioritises visibility; optimization is a separate concern (task group 7).
+**Alternative**: `next/image` with known dimensions — requires adding `width`/`height` to JSON content schema
 
 ## Risks / Trade-offs
 
 | Risk | Mitigation |
 |------|-----------|
-| Large image collections slow build time | Monitor build performance, consider splitting content by year if needed. Astro's caching helps. |
+| Large image collections slow build time | Monitor build performance, consider splitting content by year if needed. Next.js incremental builds help. |
 | Manual image management in public/ | Establish clear naming conventions and directory structure. Document in README. |
 | No runtime image resizing | Accept static sizes generated at build time; document image specifications. |
 | Metadata inheritance complexity | Clear documentation of inheritance rules; validation warns of missing required fields. |
-| PhotoSwipe library size | Lazy-loaded via dynamic import; only loads when lightbox is first opened. |
-| Dynamic route generation for albums | Test thoroughly; Astro handles reliably but requires valid content structure. |
+| PhotoSwipe library size | Loaded client-side only via `useEffect`; only initializes when component mounts. |
+| Dynamic route generation for albums | Test thoroughly; `generateStaticParams()` in Next.js requires valid content structure. |
 | Static hosting limitations | Not an issue for portfolio; no backend required. CDN caching is beneficial. |
 
-## Migration Plan
+## Implementation Plan
 
 ### Phase 1: Content Structure Setup
-1. Create Astro Content Collections schemas (`src/content/config.ts`) for Photo and Album
-2. Define validation rules and type exports
-3. Create sample content structure documentation
+1. Define TypeScript interfaces (`PhotoData`, `AlbumData`) in `src/lib/content.ts`
+2. Implement `fs`-based JSON readers and resolver functions
+3. Create JSON content files in `content/photos/` and `content/albums/`
 
 ### Phase 2: Component Development
-1. Build PhotoPortfolio component (masonry grid + filtering)
-2. Implement PhotoCard component with image lazy loading
-3. Develop Lightbox component with PhotoSwipe integration
-4. Build AlbumPage component for `/albums/[slug]` layout
+1. Build `PortfolioSection` component (masonry grid + client-side filtering)
+2. Implement `PhotoCard` component with PhotoSwipe data attributes
+3. Develop `Lightbox` component with PhotoSwipe v5 integration
+4. Build album page at `src/app/albums/[slug]/page.tsx`
 
 ### Phase 3: Homepage Integration
-1. Create portfolio section on homepage
-2. Integrate filtering system
-3. Add navigation menu (Portfolio, About, Contact)
-4. Implement hero section with SEO text
+1. Create portfolio section on homepage with hero text
+2. Integrate `PortfolioSection` with tag filtering
+3. Add `Nav` component (Portfolio, About, Contact)
 
 ### Phase 4: SEO & Optimization
-1. Add Open Graph metadata to photo and album layouts
+1. Add Open Graph metadata via Next.js Metadata API to all pages
 2. Implement structured data (JSON-LD) for Photograph and CreativeWork schemas
-3. Generate sitemap
-4. Add alt text generation logic
-5. Verify canonical URLs
+3. Generate `sitemap.ts` and `robots.ts` with `force-static`
+4. Add descriptive alt text generation logic in `PhotoCard`
+5. Verify canonical URLs via `metadataBase` in root layout
 
 ### Phase 5: Testing & Deployment
 1. Test responsive design across devices

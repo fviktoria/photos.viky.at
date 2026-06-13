@@ -60,11 +60,11 @@
 
 ## 7. Image Optimization & Performance
 
-- [ ] 7.1 Configure Astro Image for automatic AVIF/WebP generation
-- [ ] 7.2 Set image sizes for masonry grid (responsive srcset)
-- [ ] 7.3 Implement lazy loading for below-the-fold images
-- [ ] 7.4 Test lighthouse scores (target: 90+ performance)
-- [ ] 7.5 Test image load times and optimization output
+- [ ] 7.1 Add `width` and `height` fields to photo JSON schema and content files (required for `next/image`)
+- [ ] 7.2 Replace plain `<img>` tags in `PhotoCard.tsx` and `PhotoGrid.tsx` with `next/image` and a static export–compatible loader
+- [ ] 7.3 Implement `loading="lazy"` on below-the-fold images (first 4–8 photos use `loading="eager"`)
+- [ ] 7.4 Test Lighthouse scores (target: 90+ performance)
+- [ ] 7.5 Test image load times and verify WebP/AVIF output in production build
 
 ## 8. Accessibility
 
@@ -94,14 +94,13 @@
 - [ ] 10.3 Document image naming conventions and directory structure
 - [ ] 10.4 Document how to add new tags
 - [ ] 10.5 Document photo metadata inheritance rules
-- [ ] 10.6 Add example photo and album files
 
 ## 11. Deployment
 
-- [ ] 11.1 Configure build for static output (astro build)
-- [ ] 11.2 Test full build locally (no errors)
+- [ ] 11.1 Verify `output: 'export'` in `next.config.ts` and run `next build` locally with no errors
+- [ ] 11.2 Confirm `out/` directory contains all expected static pages and assets
 - [ ] 11.3 Deploy to staging environment (Vercel or Cloudflare Pages)
-- [ ] 11.4 Run lighthouse audit on staging
+- [ ] 11.4 Run Lighthouse audit on staging
 - [ ] 11.5 Verify all pages render and content displays correctly
 - [ ] 11.6 Test image optimization on production CDN
 - [ ] 11.7 Deploy to production
