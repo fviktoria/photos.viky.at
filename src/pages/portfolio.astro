@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PortfolioSection from '../components/PortfolioSection.astro';
+import { getAllResolvedPhotos, getAllTags } from '../lib/content';
+
+const photos = await getAllResolvedPhotos();
+const tags = await getAllTags();
+---
+
+<Layout
+  title="Portfolio – Viky Photography"
+  description="Photography portfolio by Viky – portraits, documentary, and street photography in Vienna, Austria."
+>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+    <h1 class="text-3xl font-bold tracking-tight mb-10">Portfolio</h1>
+    <PortfolioSection photos={photos} tags={tags} />
+  </main>
+</Layout>

@@ -29,14 +29,14 @@
 
 ## 4. Pages - Portfolio & Albums
 
-- [ ] 4.1 Create portfolio page `/portfolio` (or integrate to homepage)
-- [ ] 4.2 Fetch all photos (with inheritance) and display in masonry grid
-- [ ] 4.3 Implement client-side tag filtering with state management (if needed)
-- [ ] 4.4 Create dynamic album page template: `src/pages/albums/[slug].astro`
-- [ ] 4.5 Implement album metadata display on album pages
-- [ ] 4.6 Display contained photos on album pages in masonry grid
-- [ ] 4.7 Add breadcrumb navigation on album pages
-- [ ] 4.8 Create link to return to main portfolio from album pages
+- [x] 4.1 Create portfolio page `/portfolio` (or integrate to homepage)
+- [x] 4.2 Fetch all photos (with inheritance) and display in masonry grid
+- [x] 4.3 Implement client-side tag filtering with state management (if needed)
+- [x] 4.4 Create dynamic album page template: `src/pages/albums/[slug].astro`
+- [x] 4.5 Implement album metadata display on album pages
+- [x] 4.6 Display contained photos on album pages in masonry grid
+- [x] 4.7 Add breadcrumb navigation on album pages
+- [x] 4.8 Create link to return to main portfolio from album pages
 
 ## 5. Homepage Integration
 
