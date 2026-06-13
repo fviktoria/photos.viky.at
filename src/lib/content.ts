@@ -6,6 +6,8 @@ import { join } from 'path';
 export interface PhotoData {
   title: string;
   image: string;
+  width?: number;
+  height?: number;
   description?: string;
   tags: string[];
   location?: string;
@@ -40,6 +42,8 @@ export interface ResolvedPhoto {
   id: string;
   title: string;
   image: string;
+  width: number | undefined;
+  height: number | undefined;
   description: string | undefined;
   tags: string[];
   location: string | undefined;
@@ -90,6 +94,8 @@ function resolvePhoto(photo: PhotoEntry, albums: AlbumEntry[]): ResolvedPhoto {
     id: photo.id,
     title: photo.title,
     image: photo.image,
+    width: photo.width,
+    height: photo.height,
     description: photo.description ?? albumData?.description,
     // album tags first, then photo-specific tags
     tags: [...(albumData?.tags ?? []), ...photo.tags],

@@ -60,48 +60,6 @@
 
 ## 7. Image Optimization & Performance
 
-- [ ] 7.1 Add `width` and `height` fields to photo JSON schema and content files (required for `next/image`)
-- [ ] 7.2 Replace plain `<img>` tags in `PhotoCard.tsx` and `PhotoGrid.tsx` with `next/image` and a static export–compatible loader
-- [ ] 7.3 Implement `loading="lazy"` on below-the-fold images (first 4–8 photos use `loading="eager"`)
-- [ ] 7.4 Test Lighthouse scores (target: 90+ performance)
-- [ ] 7.5 Test image load times and verify WebP/AVIF output in production build
-
-## 8. Accessibility
-
-- [ ] 8.1 Ensure all images have meaningful alt text
-- [ ] 8.2 Test keyboard navigation in lightbox (arrow keys, escape)
-- [ ] 8.3 Add ARIA labels to filter buttons and navigation
-- [ ] 8.4 Test with screen reader (VoiceOver/NVDA)
-- [ ] 8.5 Verify color contrast meets WCAG AA standards
-
-## 9. Testing & Validation
-
-- [ ] 9.1 Test masonry grid responsive behavior on mobile, tablet, desktop
-- [ ] 9.2 Test tag filtering functionality (single and combined filters if enabled)
-- [ ] 9.3 Test lightbox opening, navigation, metadata display, close behavior
-- [ ] 9.4 Test album page navigation and contained photo display
-- [ ] 9.5 Verify all photos render correctly in grid
-- [ ] 9.6 Verify album inheritance: missing photo metadata falls back to album values
-- [ ] 9.7 Test image lazy loading and optimization
-- [ ] 9.8 Verify sitemap includes all photos and albums
-- [ ] 9.9 Test Open Graph metadata in social sharing (preview)
-- [ ] 9.10 Validate JSON-LD schema using Google's Structured Data Testing Tool
-
-## 10. Documentation
-
-- [ ] 10.1 Document content structure in README (photo/album frontmatter fields)
-- [ ] 10.2 Document how to add new photos and albums
-- [ ] 10.3 Document image naming conventions and directory structure
-- [ ] 10.4 Document how to add new tags
-- [ ] 10.5 Document photo metadata inheritance rules
-
-## 11. Deployment
-
-- [ ] 11.1 Verify `output: 'export'` in `next.config.ts` and run `next build` locally with no errors
-- [ ] 11.2 Confirm `out/` directory contains all expected static pages and assets
-- [ ] 11.3 Deploy to staging environment (Vercel or Cloudflare Pages)
-- [ ] 11.4 Run Lighthouse audit on staging
-- [ ] 11.5 Verify all pages render and content displays correctly
-- [ ] 11.6 Test image optimization on production CDN
-- [ ] 11.7 Deploy to production
-- [ ] 11.8 Monitor performance metrics post-deployment
+- [x] 7.1 Add `width` and `height` fields to photo JSON schema and content files (required for `next/image`)
+- [x] 7.2 Replace plain `<img>` tags in `PhotoCard.tsx` and `PhotoGrid.tsx` with `next/image` and a static export–compatible loader
+- [x] 7.3 Implement `loading="lazy"` on below-the-fold images (first 4–8 photos use `loading="eager"`)
