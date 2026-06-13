@@ -1,13 +1,25 @@
 ---
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
+import SEO from '../components/SEO.astro';
 
 interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  structuredData?: object | object[];
 }
 
-const { title = 'Viky Photography', description = 'Photography portfolio by Viky – Vienna, Austria' } = Astro.props;
+const {
+  title = 'Viky Photography',
+  description = 'Photography portfolio by Viky – Photographer Vienna, Austria. Event photography, portrait photography, documentary photography.',
+  ogImage,
+  ogType,
+  structuredData,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <!doctype html>
@@ -18,8 +30,15 @@ const { title = 'Viky Photography', description = 'Photography portfolio by Viky
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
     <title>{title}</title>
+    <SEO
+      title={title}
+      description={description}
+      canonical={canonical}
+      ogImage={ogImage}
+      ogType={ogType}
+      structuredData={structuredData}
+    />
   </head>
   <body class="bg-white text-neutral-900 antialiased">
     <Nav />

@@ -17,14 +17,61 @@ if (!result) return Astro.redirect('/portfolio');
 
 const { data: album, photos } = result;
 
+const siteUrl = Astro.site!.toString().replace(/\/$/, '');
+const pageUrl = `${siteUrl}/albums/${slug}`;
+
 const dateStr = album.date
   ? album.date.toLocaleDateString('en-AT', { year: 'numeric', month: 'long' })
   : '';
+
+// 6.3: OG image — use cover photo if set, else first contained photo
+const coverPhoto = album.cover
+  ? photos.find((p) => p.id === album.cover)
+  : photos[0];
+const ogImage = coverPhoto ? `${siteUrl}${coverPhoto.image}` : undefined;
+
+// 6.5: CreativeWork (ImageGallery) JSON-LD for album pages
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ImageGallery',
+  name: album.title,
+  description: album.description,
+  url: pageUrl,
+  creator: {
+    '@type': 'Person',
+    name: 'Viky',
+    url: siteUrl,
+  },
+  ...(album.date && { dateCreated: album.date.toISOString().split('T')[0] }),
+  ...(album.location && {
+    contentLocation: { '@type': 'Place', name: album.location },
+  }),
+  // 6.4: Photograph schema for each contained photo
+  hasPart: photos.map((p) => ({
+    '@type': 'Photograph',
+    name: p.title,
+    ...(p.description && { description: p.description }),
+    contentUrl: `${siteUrl}${p.image}`,
+    creator: { '@type': 'Person', name: 'Viky', url: siteUrl },
+    ...(p.date && { dateCreated: p.date.toISOString().split('T')[0] }),
+    ...(p.location && {
+      contentLocation: { '@type': 'Place', name: p.location },
+    }),
+  })),
+};
+
+// 6.9: Ensure description includes location keywords
+const metaDescription = album.location?.toLowerCase().includes('vienna')
+  ? album.description
+  : `${album.description}${album.location ? ` – ${album.location}` : ' – Vienna, Austria'}`;
 ---
 
 <Layout
   title={`${album.title} – Viky Photography`}
-  description={album.description}
+  description={metaDescription}
+  ogImage={ogImage}
+  ogType="article"
+  structuredData={structuredData}
 >
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-12">
 

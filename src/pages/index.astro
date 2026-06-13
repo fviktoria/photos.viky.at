@@ -5,11 +5,37 @@ import { getAllResolvedPhotos, getAllTags } from '../lib/content';
 
 const photos = await getAllResolvedPhotos();
 const tags = await getAllTags();
+
+const siteUrl = Astro.site!.toString().replace(/\/$/, '');
+
+// 6.1: ProfilePage + Person structured data for homepage
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  name: 'Viky Photography',
+  description:
+    'Photography portfolio by Viky – Photographer Vienna, Austria. Event photography, portrait photography, documentary photography.',
+  url: siteUrl,
+  mainEntity: {
+    '@type': 'Person',
+    name: 'Viky',
+    url: siteUrl,
+    jobTitle: 'Photographer',
+    description:
+      'Photographer based in Vienna, Austria specialising in event photography, portrait photography, and documentary photography.',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Vienna',
+      addressCountry: 'AT',
+    },
+  },
+};
 ---
 
 <Layout
   title="Viky – Photographer Vienna"
   description="Event photography, portrait photography, and documentary photography in Vienna, Austria. Visual storytelling by Viky."
+  structuredData={structuredData}
 >
   <!-- 5.1 + 5.2: Hero with SEO keywords -->
   <section class="pt-16 pb-12 sm:pt-20 sm:pb-16">

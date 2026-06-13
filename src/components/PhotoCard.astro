@@ -7,7 +7,13 @@ interface Props {
 
 const { photo } = Astro.props;
 
-const alt = [photo.title, photo.location].filter(Boolean).join(' – ');
+// 6.8: Alt text from title + location + description excerpt for SEO + accessibility
+const descExcerpt = photo.description
+  ? photo.description.slice(0, 60).trimEnd()
+  : '';
+const alt = [photo.title, photo.location, descExcerpt]
+  .filter(Boolean)
+  .join(' – ');
 
 const dateStr = photo.date
   ? photo.date.toLocaleDateString('en-AT', {

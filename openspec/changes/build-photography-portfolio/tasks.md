@@ -48,15 +48,15 @@
 
 ## 6. SEO Optimization
 
-- [ ] 6.1 Create SEO layout/component for standard metadata (title, description)
-- [ ] 6.2 Generate and apply Open Graph metadata for each photo page
-- [ ] 6.3 Generate and apply Open Graph metadata for each album page
-- [ ] 6.4 Create and apply JSON-LD Photograph schema for photo pages
-- [ ] 6.5 Create and apply JSON-LD CreativeWork schema for album pages
-- [ ] 6.6 Generate XML sitemap including all photo and album pages
-- [ ] 6.7 Add canonical URLs to all pages
-- [ ] 6.8 Create alt text generation from title + metadata context
-- [ ] 6.9 Verify location-based SEO keywords appear in meta descriptions
+- [x] 6.1 Create SEO layout/component for standard metadata (title, description)
+- [x] 6.2 Generate and apply Open Graph metadata for each photo page
+- [x] 6.3 Generate and apply Open Graph metadata for each album page
+- [x] 6.4 Create and apply JSON-LD Photograph schema for photo pages
+- [x] 6.5 Create and apply JSON-LD CreativeWork schema for album pages
+- [x] 6.6 Generate XML sitemap including all photo and album pages
+- [x] 6.7 Add canonical URLs to all pages
+- [x] 6.8 Create alt text generation from title + metadata context
+- [x] 6.9 Verify location-based SEO keywords appear in meta descriptions
 
 ## 7. Image Optimization & Performance
 
