@@ -1,46 +1,59 @@
-# Astro Starter Kit: Basics
+# photos.viky.at
 
-```sh
-npm create astro@latest -- --template basics
-```
+Photography portfolio — built with Next.js 15 and Contentful.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Stack
 
-## 🚀 Project Structure
+- **Next.js 15** (App Router, static export)
+- **Contentful** — content source for albums and photos
+- **Tailwind CSS v4**
+- **PhotoSwipe** — lightbox
 
-Inside of your Astro project, you'll see the following folders and files:
+## Project Structure
 
 ```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+src/
+├── app/
+│   ├── page.tsx                  # Home / portfolio overview
+│   ├── portfolio/page.tsx        # Portfolio page
+│   ├── albums/[slug]/page.tsx    # Album detail page
+│   ├── about/page.tsx
+│   ├── contact/page.tsx
+│   ├── layout.tsx
+│   ├── sitemap.ts
+│   └── robots.ts
+├── components/
+│   ├── navigation.tsx
+│   ├── portfolio-section.tsx
+│   ├── photo-grid.tsx
+│   ├── photo-card.tsx
+│   ├── tag-filter.tsx
+│   └── light-box.tsx
+├── lib/
+│   ├── contentful/
+│   │   ├── contentful.client.ts
+│   │   ├── interfaces/           # TypeScript types
+│   │   ├── mappers/              # Contentful entry → domain model
+│   │   ├── services/             # Data-fetching functions
+│   │   └── utils/
+│   └── seo/
+│       └── structured-data.util.ts  # JSON-LD schema builders
+└── styles/
+    └── global.css
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Commands
 
-## 🧞 Commands
+| Command         | Action                        |
+| :-------------- | :---------------------------- |
+| `npm install`   | Install dependencies          |
+| `npm run dev`   | Start dev server at `localhost:3000` |
+| `npm run build` | Build for production          |
+| `npm start`     | Start production server       |
 
-All commands are run from the root of the project, from a terminal:
+## Environment Variables
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```env
+CONTENTFUL_SPACE_ID=
+CONTENTFUL_ACCESS_TOKEN=
+```
