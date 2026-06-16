@@ -6,13 +6,17 @@ import { Lightbox } from "@/components/light-box";
 import { getAlbumSlugs, getAlbumWithPhotos } from "@/lib/contentful/services/album.service";
 import { buildAlbumJsonLd } from "@/lib/seo/structured-data.util";
 
+export const dynamicParams = false;
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
   const slugs = await getAlbumSlugs();
-  return slugs.map((slug) => ({ slug }));
+  // Next.js 16 requires at least one route when output:'export' is set.
+  // Return a sentinel that the page handles via notFound() when no albums exist yet.
+  return slugs.length > 0 ? slugs.map((slug) => ({ slug })) : [{ slug: "_" }];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

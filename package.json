@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "contentful": "^11.12.5",
-    "next": "^15.0.0",
+    "next": "^16.2.9",
     "photoswipe": "^5.4.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
