@@ -1,6 +1,7 @@
 {
   "name": "photos.viky.at",
   "version": "0.0.1",
+  "license": "CC-BY-NC-4.0",
   "private": true,
   "engines": {
     "node": ">=22.12.0"
