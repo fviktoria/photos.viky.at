@@ -11,7 +11,7 @@ export const PhotoCard: FC<Props> = ({ photo, priority = false }) => {
   const descExcerpt = photo.description
     ? photo.description.slice(0, 60).trimEnd()
     : "";
-  const alt = [photo.title, photo.location, descExcerpt]
+  const alt = [descExcerpt || photo.slug, photo.location]
     .filter(Boolean)
     .join(" – ");
 
@@ -33,7 +33,7 @@ export const PhotoCard: FC<Props> = ({ photo, priority = false }) => {
       data-tags={photo.tags.join(",")}
       data-pswp-width={w}
       data-pswp-height={h}
-      data-pswp-title={photo.title}
+      data-pswp-title={photo.description ?? ""}
       data-pswp-description={photo.description ?? ""}
       data-pswp-location={photo.location ?? ""}
       data-pswp-date={dateStr}

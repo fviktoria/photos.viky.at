@@ -5,6 +5,7 @@ out/
 
 # generated types
 .astro/
+*.tsbuildinfo
 
 # dependencies
 node_modules/
@@ -24,3 +25,8 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+
+.env.*
+
+/photos/*.jpg

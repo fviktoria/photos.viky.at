@@ -3,25 +3,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PhotoGrid } from "@/components/photo-grid";
 import { Lightbox } from "@/components/light-box";
-import { getAlbumIds, getAlbumWithPhotos } from "@/lib/content";
+import { getAlbumSlugs, getAlbumWithPhotos } from "@/lib/content";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return getAlbumIds().map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  const slugs = await getAlbumSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const result = getAlbumWithPhotos(slug);
+  const result = await getAlbumWithPhotos(slug);
   if (!result) return {};
   const { data: album, photos } = result;
 
-  const coverPhoto = album.cover
-    ? photos.find((p) => p.id === album.cover)
-    : photos[0];
+  const coverUrl = album.cover ?? photos[0]?.image;
   const description = album.location?.toLowerCase().includes("vienna")
     ? album.description
     : `${album.description}${album.location ? ` – ${album.location}` : " – Vienna, Austria"}`;
@@ -33,16 +32,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: album.title,
       description,
       type: "article",
-      ...(coverPhoto && {
-        images: [`https://photos.viky.at${coverPhoto.image}`],
-      }),
+      ...(coverUrl && { images: [coverUrl] }),
     },
   };
 }
 
 export default async function AlbumPage({ params }: Props) {
   const { slug } = await params;
-  const result = getAlbumWithPhotos(slug);
+  const result = await getAlbumWithPhotos(slug);
   if (!result) notFound();
 
   const { data: album, photos } = result;
@@ -68,9 +65,9 @@ export default async function AlbumPage({ params }: Props) {
     }),
     hasPart: photos.map((p) => ({
       "@type": "Photograph",
-      name: p.title,
+      name: p.slug,
       ...(p.description && { description: p.description }),
-      contentUrl: `${siteUrl}${p.image}`,
+      contentUrl: p.image,
       creator: { "@type": "Person", name: "Viky", url: siteUrl },
       ...(p.date && { dateCreated: p.date.toISOString().split("T")[0] }),
       ...(p.location && {

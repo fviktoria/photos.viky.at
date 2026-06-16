@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PortfolioSection } from "@/components/portfolio-section";
-import { getAllResolvedPhotos, getAllTags } from "@/lib/content";
+import { getPortfolioPagePhotos, getAllTags } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Portfolio",
@@ -8,9 +8,8 @@ export const metadata: Metadata = {
     "Photography portfolio by Viky – portraits, documentary, and event photography in Vienna, Austria.",
 };
 
-export default function Portfolio() {
-  const photos = getAllResolvedPhotos();
-  const tags = getAllTags();
+export default async function Portfolio() {
+  const [photos, tags] = await Promise.all([getPortfolioPagePhotos(), getAllTags()]);
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12">

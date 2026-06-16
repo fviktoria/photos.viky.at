@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PortfolioSection } from "@/components/portfolio-section";
-import { getAllResolvedPhotos, getAllTags } from "@/lib/content";
+import { getPortfolioPagePhotos, getAllTags } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Viky – Photographer Vienna",
@@ -33,9 +33,8 @@ const jsonLd = {
   },
 };
 
-export default function Home() {
-  const photos = getAllResolvedPhotos();
-  const tags = getAllTags();
+export default async function Home() {
+  const [photos, tags] = await Promise.all([getPortfolioPagePhotos(), getAllTags()]);
 
   return (
     <>
