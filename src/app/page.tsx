@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PortfolioSection } from "@/components/portfolio-section";
-import { getPortfolioPagePhotos, getAllTags } from "@/lib/content";
+import { getPortfolioPagePhotos, getAllTags } from "@/lib/contentful/services/portfolio.service";
 
 export const metadata: Metadata = {
   title: "Viky – Photographer Vienna",

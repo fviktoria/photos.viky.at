@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { ResolvedPhoto } from "@/lib/content";
+import type { ResolvedPhoto } from "@/lib/contentful/interfaces/photo.interface";
 import { FC } from "react";
 
 interface Props {

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAlbumSlugs } from "@/lib/content";
+import { getAlbumSlugs } from "@/lib/contentful/services/album.service";
 
 export const dynamic = "force-static";
 

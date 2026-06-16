@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PhotoGrid } from "@/components/photo-grid";
 import { Lightbox } from "@/components/light-box";
-import { getAlbumSlugs, getAlbumWithPhotos } from "@/lib/content";
+import { getAlbumSlugs, getAlbumWithPhotos } from "@/lib/contentful/services/album.service";
 
 interface Props {
   params: Promise<{ slug: string }>;

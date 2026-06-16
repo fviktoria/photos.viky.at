@@ -1,5 +1,5 @@
 import { FC } from "react";
-import type { ResolvedPhoto } from "@/lib/content";
+import type { ResolvedPhoto } from "@/lib/contentful/interfaces/photo.interface";
 import { PhotoCard } from "./photo-card";
 
 interface Props {

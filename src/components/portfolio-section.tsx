@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, useState } from "react";
-import type { ResolvedPhoto } from "@/lib/content";
+import type { ResolvedPhoto } from "@/lib/contentful/interfaces/photo.interface";
 import { PhotoGrid } from "./photo-grid";
 import { TagFilter } from "./tag-filter";
 import { Lightbox } from "./light-box";
