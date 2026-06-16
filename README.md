@@ -1,10 +1,10 @@
 # photos.viky.at
 
-Photography portfolio — built with Next.js 15 and Contentful.
+Photography portfolio — built with Next.js 16 and Contentful.
 
 ## Stack
 
-- **Next.js 15** (App Router, static export)
+- **Next.js 16** (App Router, static export)
 - **Contentful** — content source for albums and photos
 - **Tailwind CSS v4**
 - **PhotoSwipe** — lightbox
