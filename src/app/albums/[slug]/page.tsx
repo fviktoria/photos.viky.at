@@ -4,6 +4,7 @@ import Link from "next/link";
 import { PhotoGrid } from "@/components/photo-grid";
 import { Lightbox } from "@/components/light-box";
 import { getAlbumSlugs, getAlbumWithPhotos } from "@/lib/contentful/services/album.service";
+import { buildAlbumJsonLd } from "@/lib/seo/structured-data.util";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -51,30 +52,7 @@ export default async function AlbumPage({ params }: Props) {
       }).format(album.date)
     : "";
 
-  const siteUrl = "https://photos.viky.at";
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ImageGallery",
-    name: album.title,
-    description: album.description,
-    url: `${siteUrl}/albums/${slug}`,
-    creator: { "@type": "Person", name: "Viky", url: siteUrl },
-    ...(album.date && { dateCreated: album.date.toISOString().split("T")[0] }),
-    ...(album.location && {
-      contentLocation: { "@type": "Place", name: album.location },
-    }),
-    hasPart: photos.map((p) => ({
-      "@type": "Photograph",
-      name: p.slug,
-      ...(p.description && { description: p.description }),
-      contentUrl: p.image,
-      creator: { "@type": "Person", name: "Viky", url: siteUrl },
-      ...(p.date && { dateCreated: p.date.toISOString().split("T")[0] }),
-      ...(p.location && {
-        contentLocation: { "@type": "Place", name: p.location },
-      }),
-    })),
-  };
+  const jsonLd = buildAlbumJsonLd(album, photos, slug);
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12">

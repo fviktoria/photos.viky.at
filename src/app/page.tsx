@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PortfolioSection } from "@/components/portfolio-section";
 import { getPortfolioPagePhotos, getAllTags } from "@/lib/contentful/services/portfolio.service";
+import { homePageJsonLd } from "@/lib/seo/structured-data.util";
 
 export const metadata: Metadata = {
   title: "Viky – Photographer Vienna",
@@ -13,26 +14,6 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "ProfilePage",
-  name: "Viky Photography",
-  url: "https://photos.viky.at",
-  mainEntity: {
-    "@type": "Person",
-    name: "Viky",
-    url: "https://photos.viky.at",
-    jobTitle: "Photographer",
-    description:
-      "Photographer based in Vienna, Austria specialising in event photography, portrait photography, and documentary photography.",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Vienna",
-      addressCountry: "AT",
-    },
-  },
-};
-
 export default async function Home() {
   const [photos, tags] = await Promise.all([getPortfolioPagePhotos(), getAllTags()]);
 
@@ -40,7 +21,7 @@ export default async function Home() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageJsonLd) }}
       />
       <section className="pt-16 pb-12 sm:pt-20 sm:pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
