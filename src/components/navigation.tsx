@@ -26,7 +26,7 @@ export const Nav: FC = () => {
           href="/"
           className="text-base font-semibold tracking-tight text-neutral-900 hover:text-neutral-600 transition-colors duration-150"
         >
-          Viky Photography
+          Photos • by Viky
         </Link>
         <ul className="flex items-center gap-6 sm:gap-8" role="list">
           {links.map(({ href, label }) => (
