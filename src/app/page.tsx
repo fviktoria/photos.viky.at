@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { PortfolioSection } from "@/components/portfolio-section";
-import { getPortfolioPagePhotos, getAllTags } from "@/lib/contentful/services/portfolio.service";
+import {
+  getPortfolioPagePhotos,
+  getAllTags,
+} from "@/lib/contentful/services/portfolio.service";
 import { homePageJsonLd } from "@/lib/seo/structured-data.util";
 
 export const metadata: Metadata = {
@@ -15,7 +18,10 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const [photos, tags] = await Promise.all([getPortfolioPagePhotos(), getAllTags()]);
+  const [photos, tags] = await Promise.all([
+    getPortfolioPagePhotos(),
+    getAllTags(),
+  ]);
 
   return (
     <>
@@ -29,10 +35,11 @@ export default async function Home() {
             Viky
           </h1>
           <p className="text-lg sm:text-xl text-neutral-600 mb-5">
-            Photographer Vienna &mdash; visual storytelling across Austria
+            Photographer based in Vienna &mdash; visual storytelling across
+            Austria
           </p>
           <p className="text-neutral-500 max-w-xl leading-relaxed">
-            Event photography, portrait photography, and documentary photography
+            Event photography, portrait photography and documentary photography
             in Vienna. Capturing honest moments and authentic stories.
           </p>
         </div>
