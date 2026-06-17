@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@/styles/global.css";
 import { Nav } from "@/components/navigation";
+import { Footer } from "@/components/footer.component";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://photos.viky.at"),
@@ -21,9 +22,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-white text-neutral-900 antialiased">
+      <body className="bg-white text-neutral-900 antialiased flex flex-col min-h-screen">
         <Nav />
         {children}
+        <Footer />
       </body>
     </html>
   );
