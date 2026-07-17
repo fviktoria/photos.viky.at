@@ -1,6 +1,21 @@
 @import "tailwindcss";
 @import "photoswipe/style.css";
 
+/* react-masonry-css */
+.masonry-grid {
+  display: flex;
+  gap: 1rem;
+  width: auto;
+}
+
+.masonry-grid-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
 /* PhotoSwipe caption overlay */
 .pswp__photo-caption {
   position: absolute;

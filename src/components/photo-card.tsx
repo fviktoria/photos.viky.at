@@ -29,7 +29,7 @@ export const PhotoCard: FC<Props> = ({ photo, priority = false }) => {
   return (
     <a
       href={photo.image}
-      className="photo-card block mb-4 break-inside-avoid overflow-hidden rounded-sm group cursor-zoom-in"
+      className="photo-card block overflow-hidden rounded-sm group cursor-zoom-in"
       data-tags={photo.tags.join(",")}
       data-pswp-width={w}
       data-pswp-height={h}

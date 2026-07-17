@@ -1,4 +1,6 @@
-import { FC } from "react";
+"use client";
+
+import Masonry from "react-masonry-css";
 import type { ResolvedPhoto } from "@/lib/contentful/interfaces/photo.interface";
 import { PhotoCard } from "./photo-card";
 
@@ -7,16 +9,24 @@ interface Props {
   id?: string;
 }
 
-export const PhotoGrid: FC<Props> = ({ photos, id = "portfolio-gallery" }) => {
+const breakpointCols = {
+  default: 4,
+  1280: 3,
+  1024: 2,
+  640: 1,
+};
+
+export const PhotoGrid = ({ photos, id = "portfolio-gallery" }: Props) => {
   return (
-    <div
+    <Masonry
       id={id}
-      className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4"
-      style={{ columnGap: "1rem" }}
+      breakpointCols={breakpointCols}
+      className="masonry-grid"
+      columnClassName="masonry-grid-column"
     >
       {photos.map((photo, index) => (
         <PhotoCard key={photo.id} photo={photo} priority={index < 6} />
       ))}
-    </div>
+    </Masonry>
   );
 };
