@@ -28,7 +28,7 @@ export const Nav: FC = () => {
         >
           Photos • by Viky
         </Link>
-        <ul className="flex items-center gap-6 sm:gap-8" role="list">
+        {/* <ul className="flex items-center gap-6 sm:gap-8" role="list">
           {links.map(({ href, label }) => (
             <li key={href}>
               <Link
@@ -44,7 +44,7 @@ export const Nav: FC = () => {
               </Link>
             </li>
           ))}
-        </ul>
+        </ul> */}
       </nav>
     </header>
   );
