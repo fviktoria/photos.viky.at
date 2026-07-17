@@ -28,23 +28,12 @@ export const Nav: FC = () => {
         >
           Photos • by Viky
         </Link>
-        {/* <ul className="flex items-center gap-6 sm:gap-8" role="list">
-          {links.map(({ href, label }) => (
-            <li key={href}>
-              <Link
-                href={href}
-                className={`text-sm transition-colors duration-150 ${
-                  isActive(href)
-                    ? "text-neutral-900 font-medium"
-                    : "text-neutral-500 hover:text-neutral-900"
-                }`}
-                aria-current={isActive(href) ? "page" : undefined}
-              >
-                {label}
-              </Link>
-            </li>
-          ))}
-        </ul> */}
+        <a
+          href="mailto:photos.viky@icloud.com"
+          className="text-sm px-4 py-2 rounded-full border border-neutral-300 text-neutral-700 hover:border-neutral-900 hover:text-neutral-900 transition-colors duration-150"
+        >
+          Get in touch
+        </a>
       </nav>
     </header>
   );

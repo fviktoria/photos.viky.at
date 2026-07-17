@@ -42,6 +42,7 @@ export default async function Home() {
             Event photography, portrait photography and documentary photography
             in Vienna. Capturing honest moments and authentic stories.
           </p>
+
         </div>
       </section>
       <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">

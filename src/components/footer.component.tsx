@@ -12,6 +12,12 @@ export const Footer: FC = () => (
       >
         @photos.viky.at
       </a>
+      <a
+        href="mailto:photos.viky@icloud.com"
+        className="hover:text-neutral-900 transition-colors duration-150"
+      >
+        Get in touch
+      </a>
     </div>
   </footer>
 );
