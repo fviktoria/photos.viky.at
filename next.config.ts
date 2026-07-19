@@ -1,10 +1,11 @@
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next";
 
 const config: NextConfig = {
-  output: process.env.NODE_ENV === 'production' ? 'export' : undefined,
+  output: process.env.NODE_ENV === "production" ? "export" : undefined,
   images: {
-    unoptimized: true,
-    remotePatterns: [{ protocol: 'https', hostname: 'images.ctfassets.net' }],
+    loader: "custom",
+    loaderFile: "./src/lib/contentful/contentful-image.loader.ts",
+    remotePatterns: [{ protocol: "https", hostname: "images.ctfassets.net" }],
   },
 };
 
