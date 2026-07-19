@@ -25,7 +25,12 @@ export const PhotoGrid = ({ photos, id = "portfolio-gallery" }: Props) => {
       columnClassName="masonry-grid-column"
     >
       {photos.map((photo, index) => (
-        <PhotoCard key={photo.id} photo={photo} priority={index < 6} />
+        <PhotoCard
+          key={photo.id}
+          photo={photo}
+          priority={index < 6}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+        />
       ))}
     </Masonry>
   );

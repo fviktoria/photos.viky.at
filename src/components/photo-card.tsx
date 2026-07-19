@@ -5,9 +5,10 @@ import { FC } from "react";
 interface Props {
   photo: ResolvedPhoto;
   priority?: boolean;
+  sizes?: string;
 }
 
-export const PhotoCard: FC<Props> = ({ photo, priority = false }) => {
+export const PhotoCard: FC<Props> = ({ photo, priority = false, sizes = '100vw' }) => {
   const descExcerpt = photo.description
     ? photo.description.slice(0, 60).trimEnd()
     : "";
@@ -44,6 +45,7 @@ export const PhotoCard: FC<Props> = ({ photo, priority = false }) => {
         width={w}
         height={h}
         priority={priority}
+        sizes={sizes}
         className="w-full h-auto block transition-opacity duration-200 group-hover:opacity-90"
       />
     </a>
