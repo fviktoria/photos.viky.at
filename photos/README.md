@@ -10,12 +10,12 @@ Use `/sync-to-contentful` to sync to Contentful via MCP. The skill handles both 
 
 ```
 photos/
-  portrait-headshot-20260508-001.jpg   ← loose photo, no album
-  report-pride-parade-vienna-001.jpg   ← loose photo, no album
+  photos-viky-portrait-headshot-20260508-001.jpg   ← loose photo, no album
+  photos-viky-report-pride-parade-vienna-001.jpg   ← loose photo, no album
   pride-parade-vienna-2026/
     album.yaml
-    report-pride-parade-vienna-001.jpg
-    report-pride-parade-vienna-002.jpg
+    photos-viky-report-pride-parade-vienna-001.jpg
+    photos-viky-report-pride-parade-vienna-002.jpg
 ```
 
 Album subfolders must contain an `album.yaml`. Loose `.jpg` files at the root are uploaded as standalone photos with no album link.
@@ -33,7 +33,7 @@ tags:                                     # optional
   - pride
 location: Vienna, Austria                 # optional
 date: 2026-06-14                          # optional (YYYY-MM-DD)
-cover: report-pride-parade-vienna-001.jpg # optional — defaults to first photo
+cover: photos-viky-report-pride-parade-vienna-001.jpg # optional — defaults to first photo
 ```
 
 ---
@@ -41,14 +41,16 @@ cover: report-pride-parade-vienna-001.jpg # optional — defaults to first photo
 ## File naming
 
 ```
-{category}-{subject}-{YYYYMMDD}-{sequence}.jpg
+photos-viky-{category}-{subject}-{YYYYMMDD}-{sequence}.jpg
 ```
 
 Examples:
-- `portrait-headshot-20260508-001.jpg`
-- `report-pride-parade-vienna-001.jpg`
+- `photos-viky-portrait-headshot-20260508-001.jpg`
+- `photos-viky-report-pride-parade-vienna-001.jpg`
 
 The filename without extension becomes the `slug` (and asset title) on the Contentful `portfolio_photo` entry — lowercase, hyphen-separated, no spaces.
+
+`{category}` is also added to the entry's `tags` field, capitalized (e.g. `portrait` → `Portrait`).
 
 Categories in use: `portrait`, `report`
 

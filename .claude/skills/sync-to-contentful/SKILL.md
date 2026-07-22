@@ -1,9 +1,9 @@
 ---
 name: sync-to-contentful
-description: Sync photos from /photos to Contentful. Handles both loose root-level photos and album subfolders. Optimizes, uploads assets (title = slug), creates portfolio_photo and portfolio_album entries as drafts.
+description: Sync photos from /photos to Contentful. Handles both loose root-level photos and album subfolders. Optimizes, uploads assets (title = slug), creates and publishes portfolio_photo and portfolio_album entries.
 metadata:
   author: viky
-  version: "1.1"
+  version: "1.3"
 ---
 
 Sync photos and albums from the `/photos` directory to Contentful.
@@ -58,10 +58,11 @@ If a specific target was given by the user, use only that. Otherwise, if only on
 
 For each `.jpg` file in `/photos` root that was selected:
 
-### 2a. Derive slug and title
+### 2a. Derive slug, title, and category
 
-- slug = filename without extension (e.g. `portrait-headshot-20260508-001`)
+- slug = filename without extension (e.g. `photos-viky-portrait-headshot-20260508-001`)
 - title = same as slug
+- category = the segment after the `photos-viky-` prefix, up to the next hyphen (e.g. `portrait`), capitalized (e.g. `Portrait`)
 
 ### 2b. Check if photo already exists
 
@@ -102,19 +103,20 @@ Use `mcp__contentful__upload_asset` with:
 - `file.fileName`: `<filename>.jpg`
 - `file.contentType`: `image/jpeg`
 
-Store the returned asset ID. Do **not** publish.
+Store the returned asset ID. Publish it with `mcp__contentful__publish_asset`.
 
-### 2e. Create `portfolio_photo` entry (draft)
+### 2e. Create `portfolio_photo` entry
 
 Use `mcp__contentful__create_entry`:
 - `contentTypeId`: `portfolio_photo`
 - Fields (all in `{ "en-US": <value> }` locale):
   - `slug`: filename without extension
   - `image`: `{ "sys": { "type": "Link", "linkType": "Asset", "id": "<asset-id>" } }`
+  - `tags`: `[<category>]` (capitalized category derived in 2a)
 
 No `album` link — these are standalone photos.
 
-Do **not** publish. Report: "Created photo: `<slug>`."
+Publish the entry with `mcp__contentful__publish_entry`. Report: "Created and published photo: `<slug>`."
 
 ---
 
@@ -159,15 +161,16 @@ Use `mcp__contentful__create_entry`:
   - `location`: string (if present)
   - `date`: ISO date string e.g. `"2026-06-14"` (if present)
 
-Do **not** set `cover` yet. Do **not** publish. Store the entry ID.
+Do **not** set `cover` yet. Do **not** publish yet — the album is published in 3f, once `cover` is set. Store the entry ID.
 
 ### 3e. For each `.jpg` in the album folder
 
 Process in filename order:
 
-**Derive slug and title:**
+**Derive slug, title, and category:**
 - slug = filename without extension
 - title = same as slug
+- category = the segment after the `photos-viky-` prefix, up to the next hyphen, capitalized (e.g. `portrait` → `Portrait`)
 
 **Check existence:** use `mcp__contentful__search_entries` on `portfolio_photo` by slug. Skip if found.
 
@@ -190,17 +193,17 @@ Expect `204`. Stop and report if not.
 
 3. `mcp__contentful__upload_asset` with `title` = slug, `file.uploadHandle`, `file.fileName`, `file.contentType: image/jpeg`
 
-Store asset ID. Do **not** publish.
+Store asset ID. Publish it with `mcp__contentful__publish_asset`.
 
-**Create `portfolio_photo` entry (draft):**
+**Create `portfolio_photo` entry:**
 - `contentTypeId`: `portfolio_photo`
 - Fields in `{ "en-US": <value> }`:
   - `slug`: filename without extension
   - `image`: link to asset
   - `album`: link to album entry — `{ "sys": { "type": "Link", "linkType": "Entry", "id": "<album-entry-id>" } }`
-  - `tags`: album tags (if the album has tags)
+  - `tags`: `[<category>, ...album tags]` (capitalized category derived above, plus the album's tags if present)
 
-Do **not** publish. Report: "Created photo: `<slug>`."
+Publish the entry with `mcp__contentful__publish_entry` (the linked album entry doesn't need to be published yet — that happens in 3f). Report: "Created and published photo: `<slug>`."
 
 ### 3f. Set album cover
 
@@ -211,7 +214,7 @@ After all photos are processed, determine the cover asset:
 Use `mcp__contentful__update_entry` to patch the album entry:
 - `cover`: `{ "en-US": { "sys": { "type": "Link", "linkType": "Asset", "id": "<cover-asset-id>" } } }`
 
-Do **not** publish.
+Then publish the album entry with `mcp__contentful__publish_entry`. If the album already existed (3b matched) and was already published, still republish after updating `cover` so the change goes live.
 
 ---
 
@@ -225,18 +228,19 @@ Created: N  |  Skipped (existing): M
 
 ### Albums
 <album-slug>
-  Album entry: <entry-id> (draft)
+  Album entry: <entry-id> (published)
   Photos created: N  |  Skipped: M
   Cover: <cover-filename>
 
-All entries saved as drafts. Review in Contentful and publish when ready.
+All new assets and entries published.
 ```
 
 ---
 
 ## Guardrails
 
-- Never publish entries or assets — always leave as draft.
+- Publish every newly created asset and `portfolio_photo` entry right away. Publish the album entry only after `cover` is set (3f), so it never goes live incomplete.
+- If a publish call fails, report the error and ask whether to continue or abort — leave the item as an unpublished draft rather than retrying silently.
 - Never overwrite existing slugs — skip silently with a note.
 - Asset title must always equal the slug (filename without extension).
 - Stop and report if `album.yaml` is missing `title` or `slug`.
