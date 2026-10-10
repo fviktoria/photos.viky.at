@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@/styles/global.css";
 import { Nav } from "@/components/navigation";
 import { Footer } from "@/components/footer.component";
+import { getAllServicePages } from "@/lib/contentful/services/service-page.service";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://photos.viky.at"),
@@ -27,15 +28,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const servicePages = await getAllServicePages();
+  const serviceLinks = servicePages.map(({ slug, headline }) => ({
+    href: `/${slug}`,
+    label: headline,
+  }));
+
   return (
     <html lang="en">
       <body className="bg-white text-neutral-900 antialiased flex flex-col min-h-screen">
-        <Nav />
+        <Nav serviceLinks={serviceLinks} />
         {children}
         <Footer />
       </body>

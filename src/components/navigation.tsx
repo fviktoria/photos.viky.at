@@ -4,13 +4,16 @@ import { FC } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const links = [
-  { href: "/portfolio", label: "Portfolio" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
+interface ServiceLink {
+  href: string;
+  label: string;
+}
 
-export const Nav: FC = () => {
+interface Props {
+  serviceLinks?: ServiceLink[];
+}
+
+export const Nav: FC<Props> = ({ serviceLinks = [] }) => {
   const pathname = usePathname();
 
   const isActive = (href: string) =>
@@ -28,6 +31,24 @@ export const Nav: FC = () => {
         >
           Photos • by Viky
         </Link>
+        {serviceLinks.length > 0 && (
+          <ul className="hidden sm:flex items-center gap-6">
+            {serviceLinks.map(({ href, label }) => (
+              <li key={href}>
+                <Link
+                  href={href}
+                  className={`text-sm transition-colors duration-150 ${
+                    isActive(href)
+                      ? "text-neutral-900 font-medium"
+                      : "text-neutral-500 hover:text-neutral-900"
+                  }`}
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
         <a
           href="mailto:photos.viky@icloud.com"
           className="text-sm px-4 py-2 rounded-full border border-neutral-300 text-neutral-700 hover:border-neutral-900 hover:text-neutral-900 transition-colors duration-150"
