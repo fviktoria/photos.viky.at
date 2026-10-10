@@ -7,11 +7,11 @@ import {
 import { homePageJsonLd } from "@/lib/seo/structured-data.util";
 
 export const metadata: Metadata = {
-  title: "Viky – Photographer Vienna",
+  title: "Viktoria Ferstl – Photographer Vienna",
   description:
-    "Event photography, portrait photography, and documentary photography in Vienna, Austria. Visual storytelling by Viky.",
+    "Event photography, portrait photography, and documentary photography in Vienna, Austria. Visual storytelling by Viktoria Ferstl.",
   openGraph: {
-    title: "Viky – Photographer Vienna",
+    title: "Viktoria Ferstl – Photographer Vienna",
     description:
       "Event photography, portrait photography, and documentary photography in Vienna, Austria.",
   },
@@ -32,7 +32,7 @@ export default async function Home() {
       <section className="pt-16 pb-12 sm:pt-20 sm:pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <h1 className="text-5xl sm:text-6xl font-bold tracking-tight mb-4">
-            Viky
+            Viktoria Ferstl
           </h1>
           <p className="text-lg sm:text-xl text-neutral-600 mb-5">
             Photographer based in Vienna &mdash; visual storytelling across
@@ -42,7 +42,6 @@ export default async function Home() {
             Event photography, portrait photography and documentary photography
             in Vienna. Capturing honest moments and authentic stories.
           </p>
-
         </div>
       </section>
       <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">

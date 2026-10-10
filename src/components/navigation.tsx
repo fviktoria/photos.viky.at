@@ -26,10 +26,10 @@ export const Nav: FC = () => {
           href="/"
           className="text-base font-semibold tracking-tight text-neutral-900 hover:text-neutral-600 transition-colors duration-150"
         >
-          Photos • by Viky
+          Viktoria Ferstl
         </Link>
         <a
-          href="mailto:photos.viky@icloud.com"
+          href="mailto:viktoriaferstl@icloud.com"
           className="text-sm px-4 py-2 rounded-full border border-neutral-300 text-neutral-700 hover:border-neutral-900 hover:text-neutral-900 transition-colors duration-150"
         >
           Get in touch

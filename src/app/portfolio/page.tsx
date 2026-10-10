@@ -1,15 +1,21 @@
 import type { Metadata } from "next";
 import { PortfolioSection } from "@/components/portfolio-section";
-import { getPortfolioPagePhotos, getAllTags } from "@/lib/contentful/services/portfolio.service";
+import {
+  getPortfolioPagePhotos,
+  getAllTags,
+} from "@/lib/contentful/services/portfolio.service";
 
 export const metadata: Metadata = {
   title: "Portfolio",
   description:
-    "Photography portfolio by Viky – portraits, documentary, and event photography in Vienna, Austria.",
+    "Photography portfolio by Viktoria Ferstl – portraits, documentary, and event photography in Vienna, Austria.",
 };
 
 export default async function Portfolio() {
-  const [photos, tags] = await Promise.all([getPortfolioPagePhotos(), getAllTags()]);
+  const [photos, tags] = await Promise.all([
+    getPortfolioPagePhotos(),
+    getAllTags(),
+  ]);
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12">

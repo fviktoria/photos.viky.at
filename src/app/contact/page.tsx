@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Get in touch with Viky, photographer based in Vienna, Austria.",
+  description:
+    "Get in touch with Viktoria Ferstl, photographer based in Vienna, Austria.",
 };
 
 export default function Contact() {

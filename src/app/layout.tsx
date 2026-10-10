@@ -4,12 +4,12 @@ import { Nav } from "@/components/navigation";
 import { Footer } from "@/components/footer.component";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://photos.viky.at"),
-  title: { default: "Viky Photography", template: "%s – Viky Photography" },
+  metadataBase: new URL("https://viktoriaferstl.at"),
+  title: { default: "Viktoria Ferstl", template: "%s – Viktoria Ferstl" },
   description:
-    "Photography portfolio by Viky – Photographer Vienna, Austria. Event photography, portrait photography, documentary photography.",
+    "Photography portfolio by Viktoria Ferstl – Photographer Vienna, Austria. Event photography, portrait photography, documentary photography.",
   openGraph: {
-    siteName: "Viky Photography",
+    siteName: "Viktoria Ferstl",
     locale: "en_AT",
     type: "website",
   },
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   appleWebApp: {
-    title: "photos.viky",
+    title: "Viktoria Ferstl",
   },
 };
 
