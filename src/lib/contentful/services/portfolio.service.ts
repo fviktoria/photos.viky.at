@@ -5,22 +5,33 @@ import type { PhotoSkeleton } from '../interfaces/photo.interface';
 import type { AlbumSkeleton } from '../interfaces/album.interface';
 import { toPhoto } from '../mappers/photo.mapper';
 
-export async function getHomePage(): Promise<HomePageContent> {
-  const res = await getContentfulClient().getEntries<HomePageSkeleton>({
-    content_type: 'portfolio_page',
-    include: 2,
-    limit: 1,
-  });
-  const page = res.items[0];
+function toContentfulLocale(locale: string): string {
+  if (locale === 'en') return 'en-US';
+  return 'de-AT';
+}
+
+export async function getHomePage(locale = 'de'): Promise<HomePageContent> {
+  const contentfulLocale = toContentfulLocale(locale);
+
+  const [pageRes, heroRes] = await Promise.all([
+    getContentfulClient().getEntries<HomePageSkeleton>({ content_type: 'portfolio_page', include: 2, limit: 1 }),
+    contentfulLocale !== 'en-US'
+      ? getContentfulClient().getEntries<HomePageSkeleton>({ content_type: 'portfolio_page', locale: contentfulLocale, limit: 1 })
+      : Promise.resolve(null),
+  ]);
+
+  const page = pageRes.items[0];
+  const heroPage = heroRes?.items[0] ?? page;
   const photos = page
     ? ((page.fields.photos ?? []) as unknown as Entry<PhotoSkeleton>[])
         .filter((p) => 'fields' in p)
         .map((p) => toPhoto(p))
     : [];
+
   return {
-    heroHeadline: (page?.fields.heroHeadline as string | undefined) ?? 'Viktoria Ferstl',
-    heroTagline: (page?.fields.heroTagline as string | undefined) ?? 'Photographer based in Vienna — visual storytelling across Austria',
-    heroDescription: (page?.fields.heroDescription as string | undefined) ?? 'Event photography, portrait photography and documentary photography in Vienna. Capturing honest moments and authentic stories.',
+    heroHeadline: (heroPage?.fields.heroHeadline as string | undefined) ?? 'Viktoria Ferstl',
+    heroTagline: (heroPage?.fields.heroTagline as string | undefined) ?? 'Photographer based in Vienna — visual storytelling across Austria',
+    heroDescription: (heroPage?.fields.heroDescription as string | undefined) ?? 'Event photography, portrait photography and documentary photography in Vienna. Capturing honest moments and authentic stories.',
     photos,
   };
 }

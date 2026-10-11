@@ -1,16 +1,12 @@
 "use client";
 
 import { FC } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-const links = [
-  { href: "/portfolio", label: "Portfolio" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
+import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
+import { LanguageSwitch } from "@/components/language-switch.component";
 
 export const Nav: FC = () => {
+  const t = useTranslations("nav");
   const pathname = usePathname();
 
   const isActive = (href: string) =>
@@ -28,12 +24,15 @@ export const Nav: FC = () => {
         >
           Viktoria Ferstl
         </Link>
-        <a
-          href="mailto:viktoriaferstl.foto@icloud.com"
-          className="text-sm px-4 py-2 rounded-full border border-neutral-300 text-neutral-700 hover:border-neutral-900 hover:text-neutral-900 transition-colors duration-150"
-        >
-          Get in touch
-        </a>
+        <div className="flex items-center gap-4">
+          <LanguageSwitch />
+          <a
+            href="mailto:viktoriaferstl.foto@icloud.com"
+            className="text-sm px-4 py-2 rounded-full border border-neutral-300 text-neutral-700 hover:border-neutral-900 hover:text-neutral-900 transition-colors duration-150"
+          >
+            {t("getInTouch")}
+          </a>
+        </div>
       </nav>
     </header>
   );

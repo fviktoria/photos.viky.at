@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
 import { PortfolioSection } from "@/components/portfolio-section";
 import {
   getHomePage,
@@ -17,8 +18,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function Home() {
-  const [homePage, tags] = await Promise.all([getHomePage(), getAllTags()]);
+interface Props {
+  params: Promise<{ locale: string }>;
+}
+
+export default async function Home({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const [homePage, tags] = await Promise.all([
+    getHomePage(locale),
+    getAllTags(),
+  ]);
 
   return (
     <>
