@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PortfolioSection } from "@/components/portfolio-section";
 import {
-  getPortfolioPagePhotos,
+  getHomePage,
   getAllTags,
 } from "@/lib/contentful/services/portfolio.service";
 
@@ -12,10 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Portfolio() {
-  const [photos, tags] = await Promise.all([
-    getPortfolioPagePhotos(),
-    getAllTags(),
-  ]);
+  const [{ photos }, tags] = await Promise.all([getHomePage(), getAllTags()]);
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12">

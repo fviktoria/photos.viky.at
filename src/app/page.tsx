@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PortfolioSection } from "@/components/portfolio-section";
 import {
-  getPortfolioPagePhotos,
+  getHomePage,
   getAllTags,
 } from "@/lib/contentful/services/portfolio.service";
 import { homePageJsonLd } from "@/lib/seo/structured-data.util";
@@ -18,10 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const [photos, tags] = await Promise.all([
-    getPortfolioPagePhotos(),
-    getAllTags(),
-  ]);
+  const [homePage, tags] = await Promise.all([getHomePage(), getAllTags()]);
 
   return (
     <>
@@ -32,20 +29,18 @@ export default async function Home() {
       <section className="pt-16 pb-12 sm:pt-20 sm:pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <h1 className="text-5xl sm:text-6xl font-bold tracking-tight mb-4">
-            Viktoria Ferstl
+            {homePage.heroHeadline}
           </h1>
           <p className="text-lg sm:text-xl text-neutral-600 mb-5">
-            Photographer based in Vienna &mdash; visual storytelling across
-            Austria
+            {homePage.heroTagline}
           </p>
           <p className="text-neutral-500 max-w-xl leading-relaxed">
-            Event photography, portrait photography and documentary photography
-            in Vienna. Capturing honest moments and authentic stories.
+            {homePage.heroDescription}
           </p>
         </div>
       </section>
       <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
-        <PortfolioSection photos={photos} tags={tags} />
+        <PortfolioSection photos={homePage.photos} tags={tags} />
       </section>
     </>
   );

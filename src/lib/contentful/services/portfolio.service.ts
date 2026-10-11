@@ -1,20 +1,28 @@
 import type { Entry } from 'contentful';
 import { contentfulClient } from '../contentful.client';
-import type { PageSkeleton } from '../interfaces/page.interface';
-import type { PhotoSkeleton, ResolvedPhoto } from '../interfaces/photo.interface';
+import type { HomePageSkeleton, HomePageContent } from '../interfaces/page.interface';
+import type { PhotoSkeleton } from '../interfaces/photo.interface';
 import type { AlbumSkeleton } from '../interfaces/album.interface';
 import { toPhoto } from '../mappers/photo.mapper';
 
-export async function getPortfolioPagePhotos(): Promise<ResolvedPhoto[]> {
-  const res = await contentfulClient.getEntries<PageSkeleton>({
+export async function getHomePage(): Promise<HomePageContent> {
+  const res = await contentfulClient.getEntries<HomePageSkeleton>({
     content_type: 'portfolio_page',
     include: 2,
     limit: 1,
   });
   const page = res.items[0];
-  if (!page) return [];
-  const photos = (page.fields.photos ?? []) as unknown as Entry<PhotoSkeleton>[];
-  return photos.filter((p) => 'fields' in p).map((p) => toPhoto(p));
+  const photos = page
+    ? ((page.fields.photos ?? []) as unknown as Entry<PhotoSkeleton>[])
+        .filter((p) => 'fields' in p)
+        .map((p) => toPhoto(p))
+    : [];
+  return {
+    heroHeadline: (page?.fields.heroHeadline as string | undefined) ?? 'Viktoria Ferstl',
+    heroTagline: (page?.fields.heroTagline as string | undefined) ?? 'Photographer based in Vienna — visual storytelling across Austria',
+    heroDescription: (page?.fields.heroDescription as string | undefined) ?? 'Event photography, portrait photography and documentary photography in Vienna. Capturing honest moments and authentic stories.',
+    photos,
+  };
 }
 
 export async function getAllTags(): Promise<string[]> {
