@@ -1,11 +1,11 @@
-import { contentfulClient } from '../contentful.client';
+import { getContentfulClient } from '../contentful.client';
 import type { AlbumSkeleton, AlbumEntry } from '../interfaces/album.interface';
 import type { PhotoSkeleton, ResolvedPhoto } from '../interfaces/photo.interface';
 import { toAlbum } from '../mappers/album.mapper';
 import { toPhoto } from '../mappers/photo.mapper';
 
 export async function getAlbumSlugs(): Promise<string[]> {
-  const res = await contentfulClient.getEntries<AlbumSkeleton>({
+  const res = await getContentfulClient().getEntries<AlbumSkeleton>({
     content_type: 'portfolio_album',
     limit: 1000,
   });
@@ -15,7 +15,7 @@ export async function getAlbumSlugs(): Promise<string[]> {
 export async function getAlbumWithPhotos(
   slug: string,
 ): Promise<{ data: AlbumEntry; photos: ResolvedPhoto[] } | null> {
-  const albumRes = await contentfulClient.getEntries<AlbumSkeleton>({
+  const albumRes = await getContentfulClient().getEntries<AlbumSkeleton>({
     content_type: 'portfolio_album',
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     'fields.slug': slug as any,
@@ -25,7 +25,7 @@ export async function getAlbumWithPhotos(
   if (!albumRaw) return null;
   const album = toAlbum(albumRaw);
 
-  const photosRes = await contentfulClient.getEntries<PhotoSkeleton>({
+  const photosRes = await getContentfulClient().getEntries<PhotoSkeleton>({
     content_type: 'portfolio_photo',
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     links_to_entry: albumRaw.sys.id as any,

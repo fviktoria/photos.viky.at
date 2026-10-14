@@ -1,12 +1,12 @@
 import type { Entry } from 'contentful';
-import { contentfulClient } from '../contentful.client';
+import { getContentfulClient } from '../contentful.client';
 import type { HomePageSkeleton, HomePageContent } from '../interfaces/page.interface';
 import type { PhotoSkeleton } from '../interfaces/photo.interface';
 import type { AlbumSkeleton } from '../interfaces/album.interface';
 import { toPhoto } from '../mappers/photo.mapper';
 
 export async function getHomePage(): Promise<HomePageContent> {
-  const res = await contentfulClient.getEntries<HomePageSkeleton>({
+  const res = await getContentfulClient().getEntries<HomePageSkeleton>({
     content_type: 'portfolio_page',
     include: 2,
     limit: 1,
@@ -27,8 +27,8 @@ export async function getHomePage(): Promise<HomePageContent> {
 
 export async function getAllTags(): Promise<string[]> {
   const [photosRes, albumsRes] = await Promise.all([
-    contentfulClient.getEntries<PhotoSkeleton>({ content_type: 'portfolio_photo', limit: 1000 }),
-    contentfulClient.getEntries<AlbumSkeleton>({ content_type: 'portfolio_album', limit: 1000 }),
+    getContentfulClient().getEntries<PhotoSkeleton>({ content_type: 'portfolio_photo', limit: 1000 }),
+    getContentfulClient().getEntries<AlbumSkeleton>({ content_type: 'portfolio_album', limit: 1000 }),
   ]);
   const tags = new Set<string>();
   photosRes.items.forEach((p) => ((p.fields.tags as string[] | undefined) ?? []).forEach((t) => tags.add(t)));
