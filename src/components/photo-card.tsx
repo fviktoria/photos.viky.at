@@ -31,7 +31,7 @@ export const PhotoCard: FC<Props> = ({ photo, priority = false, sizes = '100vw' 
     <a
       href={photo.image}
       className="photo-card block overflow-hidden rounded-sm group cursor-zoom-in"
-      data-tags={photo.tags.join(",")}
+      data-tags={photo.tags.map((t) => t.id).join(",")}
       data-pswp-width={w}
       data-pswp-height={h}
       data-pswp-title={photo.description ?? ""}

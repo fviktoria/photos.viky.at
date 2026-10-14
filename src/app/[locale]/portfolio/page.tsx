@@ -29,7 +29,10 @@ export default async function Portfolio({ params }: Props) {
   setRequestLocale(locale);
 
   const t = await getTranslations("portfolio");
-  const [{ photos }, tags] = await Promise.all([getHomePage(locale), getAllTags()]);
+  const [{ photos }, tags] = await Promise.all([
+    getHomePage(locale),
+    getAllTags(locale),
+  ]);
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12">

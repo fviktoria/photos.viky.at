@@ -28,7 +28,7 @@ export default async function Home({ params }: Props) {
 
   const [homePage, tags] = await Promise.all([
     getHomePage(locale),
-    getAllTags(),
+    getAllTags(locale),
   ]);
 
   return (

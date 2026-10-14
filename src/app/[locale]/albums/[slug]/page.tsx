@@ -98,7 +98,7 @@ export default async function AlbumPage({ params }: Props) {
         <div className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-neutral-500">
           {album.location && <span>{album.location}</span>}
           {dateStr && <span>{dateStr}</span>}
-          {album.tags.length > 0 && <span>{album.tags.join(" · ")}</span>}
+          {album.tags.length > 0 && <span>{album.tags.map((t) => t.label).join(" · ")}</span>}
         </div>
       </header>
 

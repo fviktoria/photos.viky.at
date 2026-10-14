@@ -1,5 +1,6 @@
 import type { EntryFieldTypes } from 'contentful';
 import type { AlbumSkeleton, AlbumEntry } from './album.interface';
+import type { TagSkeleton, ResolvedTag } from './tag.interface';
 
 export type PhotoSkeleton = {
   contentTypeId: 'portfolio_photo';
@@ -7,7 +8,7 @@ export type PhotoSkeleton = {
     slug: EntryFieldTypes.Symbol;
     image: EntryFieldTypes.AssetLink;
     description: EntryFieldTypes.Text;
-    tags: EntryFieldTypes.Array<EntryFieldTypes.Symbol>;
+    tagRefs: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<TagSkeleton>>;
     location: EntryFieldTypes.Symbol;
     date: EntryFieldTypes.Date;
     album: EntryFieldTypes.EntryLink<AlbumSkeleton>;
@@ -21,7 +22,7 @@ export interface ResolvedPhoto {
   width: number | undefined;
   height: number | undefined;
   description: string | undefined;
-  tags: string[];
+  tags: ResolvedTag[];
   location: string | undefined;
   date: Date | undefined;
   album: string | undefined;

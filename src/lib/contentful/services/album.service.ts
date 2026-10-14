@@ -29,6 +29,7 @@ export async function getAlbumWithPhotos(
     content_type: 'portfolio_photo',
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     links_to_entry: albumRaw.sys.id as any,
+    include: 1,
     limit: 1000,
   });
 

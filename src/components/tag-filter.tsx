@@ -2,9 +2,10 @@
 
 import { FC } from "react";
 import { useTranslations } from "next-intl";
+import type { ResolvedTag } from "@/lib/contentful/interfaces/tag.interface";
 
 interface Props {
-  tags: string[];
+  tags: ResolvedTag[];
   activeTag: string;
   onFilter: (tag: string) => void;
 }
@@ -32,12 +33,12 @@ export const TagFilter: FC<Props> = ({ tags, activeTag, onFilter }) => {
       </button>
       {tags.map((tag) => (
         <button
-          key={tag}
-          className={`${base} ${activeTag === tag ? active : inactive}`}
-          onClick={() => onFilter(tag)}
-          aria-pressed={activeTag === tag}
+          key={tag.id}
+          className={`${base} ${activeTag === tag.id ? active : inactive}`}
+          onClick={() => onFilter(tag.id)}
+          aria-pressed={activeTag === tag.id}
         >
-          {tag}
+          {tag.label}
         </button>
       ))}
     </div>
