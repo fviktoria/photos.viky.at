@@ -1,8 +1,8 @@
-import { createClient, type ContentfulClientApi, type EntrySkeletonType } from 'contentful';
+import { createClient } from 'contentful';
 
-let _client: ContentfulClientApi<EntrySkeletonType> | null = null;
+let _client: ReturnType<typeof createClient> | null = null;
 
-export function getContentfulClient(): ContentfulClientApi<EntrySkeletonType> {
+export function getContentfulClient(): ReturnType<typeof createClient> {
   if (!_client) {
     _client = createClient({
       space: process.env.CONTENTFUL_SPACE_ID!,
