@@ -1,21 +1,23 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Link from "next/link";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { PhotoGrid } from "@/components/photo-grid";
 import { Lightbox } from "@/components/light-box";
-import { getAlbumSlugs, getAlbumWithPhotos } from "@/lib/contentful/services/album.service";
+import {
+  getAlbumSlugs,
+  getAlbumWithPhotos,
+} from "@/lib/contentful/services/album.service";
 import { buildAlbumJsonLd } from "@/lib/seo/structured-data.util";
 
 export const dynamicParams = false;
 
 interface Props {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }
 
 export async function generateStaticParams() {
   const slugs = await getAlbumSlugs();
-  // Next.js 16 requires at least one route when output:'export' is set.
-  // Return a sentinel that the page handles via notFound() when no albums exist yet.
   return slugs.length > 0 ? slugs.map((slug) => ({ slug })) : [{ slug: "_" }];
 }
 
@@ -43,14 +45,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function AlbumPage({ params }: Props) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
+
   const result = await getAlbumWithPhotos(slug);
   if (!result) notFound();
 
   const { data: album, photos } = result;
+  const t = await getTranslations("album");
 
+  const intlLocale = locale === "de" ? "de-AT" : "en-US";
   const dateStr = album.date
-    ? new Intl.DateTimeFormat("en-AT", {
+    ? new Intl.DateTimeFormat(intlLocale, {
         year: "numeric",
         month: "long",
       }).format(album.date)
@@ -65,7 +71,6 @@ export default async function AlbumPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="mb-8 text-sm text-neutral-500">
         <ol className="flex items-center gap-2">
           <li>
@@ -73,7 +78,7 @@ export default async function AlbumPage({ params }: Props) {
               href="/portfolio"
               className="hover:text-neutral-900 transition-colors"
             >
-              Portfolio
+              {t("breadcrumb")}
             </Link>
           </li>
           <li aria-hidden="true">›</li>
@@ -83,7 +88,6 @@ export default async function AlbumPage({ params }: Props) {
         </ol>
       </nav>
 
-      {/* Album metadata */}
       <header className="mb-12">
         <h1 className="text-3xl font-bold tracking-tight mb-3">
           {album.title}
@@ -98,23 +102,21 @@ export default async function AlbumPage({ params }: Props) {
         </div>
       </header>
 
-      {/* Contained photos */}
       {photos.length > 0 ? (
         <>
           <PhotoGrid photos={photos} id="album-gallery" />
           <Lightbox galleryId="album-gallery" />
         </>
       ) : (
-        <p className="text-neutral-400">No photos in this album yet.</p>
+        <p className="text-neutral-400">{t("noPhotos")}</p>
       )}
 
-      {/* Back link */}
       <div className="mt-16 pt-8 border-t border-neutral-100">
         <Link
           href="/portfolio"
           className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors"
         >
-          ← Back to Portfolio
+          {t("backToPortfolio")}
         </Link>
       </div>
     </main>

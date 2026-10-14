@@ -1,4 +1,7 @@
+"use client";
+
 import { FC } from "react";
+import { useTranslations } from "next-intl";
 
 interface Props {
   tags: string[];
@@ -13,6 +16,7 @@ const inactive =
   "border-neutral-300 text-neutral-700 hover:bg-neutral-900 hover:text-white";
 
 export const TagFilter: FC<Props> = ({ tags, activeTag, onFilter }) => {
+  const t = useTranslations("portfolio");
   return (
     <div
       className="flex flex-wrap gap-2 mb-8"
@@ -24,7 +28,7 @@ export const TagFilter: FC<Props> = ({ tags, activeTag, onFilter }) => {
         onClick={() => onFilter("all")}
         aria-pressed={activeTag === "all"}
       >
-        All
+        {t("filterAll")}
       </button>
       {tags.map((tag) => (
         <button

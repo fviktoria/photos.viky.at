@@ -1,0 +1,26 @@
+{
+  "nav": {
+    "getInTouch": "Kontakt"
+  },
+  "footer": {
+    "copyright": "© 2026 Viktoria Ferstl",
+    "getInTouch": "Kontakt"
+  },
+  "portfolio": {
+    "title": "Portfolio",
+    "filterAll": "Alle"
+  },
+  "about": {
+    "title": "Über mich",
+    "comingSoon": "Bald verfügbar."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "comingSoon": "Bald verfügbar."
+  },
+  "album": {
+    "breadcrumb": "Portfolio",
+    "backToPortfolio": "← Zurück zum Portfolio",
+    "noPhotos": "Noch keine Fotos in diesem Album."
+  }
+}
