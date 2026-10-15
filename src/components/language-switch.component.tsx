@@ -3,6 +3,7 @@
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useTransition } from "react";
+import { Globe } from "lucide-react";
 
 export const LanguageSwitch = () => {
   const locale = useLocale();
@@ -21,9 +22,10 @@ export const LanguageSwitch = () => {
     <button
       onClick={toggle}
       disabled={isPending}
-      className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors duration-150 disabled:opacity-50"
+      className="flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-900 transition-colors duration-150 disabled:opacity-50"
       aria-label={locale === "de" ? "Switch to English" : "Auf Deutsch wechseln"}
     >
+      <Globe size={14} />
       {locale === "de" ? "EN" : "DE"}
     </button>
   );

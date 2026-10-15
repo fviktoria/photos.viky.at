@@ -8,16 +8,24 @@ export const Footer: FC = async () => {
 
   return (
     <footer className="border-t border-neutral-100 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-neutral-400">
-        <span>{t("copyright")}</span>
-        <div className="flex items-center gap-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex justify-between text-sm text-neutral-400">
+        <div className="flex flex-col gap-1">
+          <span>{t("copyright")}</span>
+          <Link
+            href={`/${t("imprintSlug")}`}
+            className="hover:text-neutral-900 transition-colors duration-150"
+          >
+            {t("imprint")}
+          </Link>
+        </div>
+        <div className="flex flex-col items-end gap-1">
           <a
             href="https://www.instagram.com/viktoriaferstl.at"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-neutral-900 transition-colors duration-150"
           >
-            @viktoriaferstl.at
+            Instagram
           </a>
           <a
             href="mailto:hallo@viktoriaferstl.at"
@@ -25,13 +33,9 @@ export const Footer: FC = async () => {
           >
             {t("getInTouch")}
           </a>
-          <Link
-            href={`/${t("imprintSlug")}`}
-            className="hover:text-neutral-900 transition-colors duration-150"
-          >
-            {t("imprint")}
-          </Link>
-          <LanguageSwitch />
+          <div className="mt-8">
+            <LanguageSwitch />
+          </div>
         </div>
       </div>
     </footer>
