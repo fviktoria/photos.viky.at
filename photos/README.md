@@ -10,15 +10,14 @@ Use `/sync-to-contentful` to sync to Contentful via MCP. The skill handles both 
 
 ```
 photos/
-  photos-viky-portrait-headshot-20260508-001.jpg   ← loose photo, no album
-  photos-viky-report-pride-parade-vienna-001.jpg   ← loose photo, no album
+  viktoria-ferstl_portrait_2026-10_01.jpeg         ← loose photo, no album
   pride-parade-vienna-2026/
     album.yaml
-    photos-viky-report-pride-parade-vienna-001.jpg
-    photos-viky-report-pride-parade-vienna-002.jpg
+    viktoria-ferstl_report_2026-06-14_01.jpeg
+    viktoria-ferstl_report_2026-06-14_02.jpeg
 ```
 
-Album subfolders must contain an `album.yaml`. Loose `.jpg` files at the root are uploaded as standalone photos with no album link.
+Album subfolders must contain an `album.yaml`. Loose `.jpg` / `.jpeg` files at the root are uploaded as standalone photos with no album link.
 
 ---
 
@@ -28,31 +27,37 @@ Album subfolders must contain an `album.yaml`. Loose `.jpg` files at the root ar
 title: Pride Parade Vienna 2026           # required
 slug: pride-parade-vienna-2026            # required — unique Contentful slug
 description: A report from Vienna Pride.  # optional
-tags:                                     # optional
+tags:                                     # optional — slugs of portfolio_tag entries
   - report
   - pride
 location: Vienna, Austria                 # optional
 date: 2026-06-14                          # optional (YYYY-MM-DD)
-cover: photos-viky-report-pride-parade-vienna-001.jpg # optional — defaults to first photo
+cover: viktoria-ferstl_report_2026-06-14_01.jpeg # optional — defaults to first photo
 ```
 
 ---
 
 ## File naming
 
+**Current:**
+```
+viktoria-ferstl_{tag}_{YYYY-MM[-DD]}_{sequence}.jpeg
+```
+
+Examples:
+- `viktoria-ferstl_baptism_2026-10_01.jpeg`
+- `viktoria-ferstl_portrait_2026-10-05_01.jpeg`
+
+**Legacy (still accepted):**
 ```
 photos-viky-{category}-{subject}-{YYYYMMDD}-{sequence}.jpg
 ```
 
-Examples:
-- `photos-viky-portrait-headshot-20260508-001.jpg`
-- `photos-viky-report-pride-parade-vienna-001.jpg`
+The filename without extension becomes the `slug` (and asset title) on the Contentful `portfolio_photo` entry.
 
-The filename without extension becomes the `slug` (and asset title) on the Contentful `portfolio_photo` entry — lowercase, hyphen-separated, no spaces.
+`{tag}` (current) or `{category}` (legacy) is resolved to a `portfolio_tag` entry in Contentful and linked via `tagRefs`. A new `portfolio_tag` is created automatically if it doesn't already exist.
 
-`{category}` is also added to the entry's `tags` field, capitalized (e.g. `portrait` → `Portrait`).
-
-Categories in use: `portrait`, `report`
+Tags in use: `baptism`, `portrait`, `report`
 
 ---
 
@@ -61,7 +66,7 @@ Categories in use: `portrait`, `report`
 The `/sync-to-contentful` skill runs `sips` automatically on each photo before uploading, but only for photos that don't already exist in Contentful:
 
 ```bash
-sips -Z 2500 --setProperty formatOptions 85 <file>.jpg
+sips -Z 2500 --setProperty formatOptions 85 <file>.jpeg
 ```
 
 Max 2500px on the long edge, JPEG quality 85. Modifies files in place — keep originals elsewhere.

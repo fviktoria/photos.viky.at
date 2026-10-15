@@ -30,3 +30,4 @@ pnpm-debug.log*
 .env.*
 
 /photos/*.jpg
+/photos/*.jpeg

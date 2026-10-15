@@ -31,9 +31,9 @@ Optionally specify a target:
 
 Run both commands:
 
-**Root-level loose photos** (`.jpg` files directly in `/photos`, not in subfolders):
+**Root-level loose photos** (`.jpg` / `.jpeg` files directly in `/photos`, not in subfolders):
 ```bash
-find ./photos -maxdepth 1 -name "*.jpg" | sort
+find ./photos -maxdepth 1 \( -name "*.jpg" -o -name "*.jpeg" \) | sort
 ```
 
 **Album subfolders** (subfolders containing `album.yaml`):
@@ -54,15 +54,45 @@ If a specific target was given by the user, use only that. Otherwise, if only on
 
 ---
 
+## Tag resolution (helper — used by Steps 2 and 3)
+
+Tags on `portfolio_photo` and `portfolio_album` entries are stored as Entry links in the `tagRefs` field (not plain strings). Before setting tags on any entry:
+
+1. Collect all tag slugs for that entry (lowercase, e.g. `portrait`, `report`).
+2. For each slug, call `mcp__contentful__search_entries` with `contentTypeId: portfolio_tag` and `query: { "fields.slug": "<slug>" }`.
+   - If found: note the entry ID.
+   - If not found: create a new `portfolio_tag` entry via `mcp__contentful__create_entry`:
+     - `contentTypeId`: `portfolio_tag`
+     - Fields (all in `{ "en-US": <value> }` locale):
+       - `slug`: the lowercase slug (e.g. `portrait`)
+       - `label`: the capitalized label (e.g. `Portrait`)
+     - Publish with `mcp__contentful__publish_entry`. Note the entry ID.
+3. Build the link array for `tagRefs`:
+   ```json
+   [
+     { "sys": { "type": "Link", "linkType": "Entry", "id": "<tag-entry-id>" } }
+   ]
+   ```
+
+---
+
 ## Step 2: Process root-level photos
 
-For each `.jpg` file in `/photos` root that was selected:
+For each `.jpg` / `.jpeg` file in `/photos` root that was selected:
 
-### 2a. Derive slug, title, and category
+### 2a. Derive slug, title, and tag
 
-- slug = filename without extension (e.g. `photos-viky-portrait-headshot-20260508-001`)
+Files follow either of two naming conventions:
+
+**Current:** `viktoria-ferstl_{tag}_{YYYY-MM[-DD]}_{seq}.jpeg`
+- slug = filename without extension (e.g. `viktoria-ferstl_baptism_2026-10_01` or `viktoria-ferstl_baptism_2026-10-05_01`)
 - title = same as slug
-- category = the segment after the `photos-viky-` prefix, up to the next hyphen (e.g. `portrait`), capitalized (e.g. `Portrait`)
+- tag slug = the segment between the first and second `_` (e.g. `baptism`), lowercase
+
+**Legacy:** `photos-viky-{category}-{subject}-{YYYYMMDD}-{seq}.jpg`
+- slug = filename without extension
+- title = same as slug
+- tag slug = the segment after `photos-viky-` up to the next `-` (e.g. `portrait`), lowercase
 
 ### 2b. Check if photo already exists
 
@@ -107,12 +137,14 @@ Store the returned asset ID. Publish it with `mcp__contentful__publish_asset`.
 
 ### 2e. Create `portfolio_photo` entry
 
+Resolve the tag from 2a using the **Tag resolution** helper above to get an entry ID.
+
 Use `mcp__contentful__create_entry`:
 - `contentTypeId`: `portfolio_photo`
 - Fields (all in `{ "en-US": <value> }` locale):
   - `slug`: filename without extension
   - `image`: `{ "sys": { "type": "Link", "linkType": "Asset", "id": "<asset-id>" } }`
-  - `tags`: `[<category>]` (capitalized category derived in 2a)
+  - `tagRefs`: link array built from the resolved tag entry ID(s)
 
 No `album` link — these are standalone photos.
 
@@ -151,32 +183,36 @@ If not found: proceed to create it (3d).
 
 ### 3d. Create album entry (draft)
 
+If `album.yaml` has a `tags` list, resolve each tag slug using the **Tag resolution** helper above to get entry IDs.
+
 Use `mcp__contentful__create_entry`:
 - `contentTypeId`: `portfolio_album`
 - Fields (all in `{ "en-US": <value> }` locale):
   - `title`: string
   - `slug`: string
   - `description`: string (if present)
-  - `tags`: array of strings (if present)
+  - `tagRefs`: link array from resolved tag entry IDs (if tags present)
   - `location`: string (if present)
   - `date`: ISO date string e.g. `"2026-06-14"` (if present)
 
 Do **not** set `cover` yet. Do **not** publish yet — the album is published in 3f, once `cover` is set. Store the entry ID.
 
-### 3e. For each `.jpg` in the album folder
+### 3e. For each `.jpg` / `.jpeg` in the album folder
 
 Process in filename order:
 
-**Derive slug, title, and category:**
+**Derive slug, title, and tag slug** (same convention rules as Step 2a — current or legacy naming):
 - slug = filename without extension
 - title = same as slug
-- category = the segment after the `photos-viky-` prefix, up to the next hyphen, capitalized (e.g. `portrait` → `Portrait`)
+- tag slug = derived from filename (lowercase)
+
+**Collect tags:** merge the photo's own tag slug with any tags from `album.yaml`. Resolve all using the **Tag resolution** helper to get entry IDs.
 
 **Check existence:** use `mcp__contentful__search_entries` on `portfolio_photo` by slug. Skip if found.
 
 **Optimize** (only if not skipped):
 ```bash
-sips -Z 2500 --setProperty formatOptions 85 "<album-folder-path>/<filename>.jpg"
+sips -Z 2500 --setProperty formatOptions 85 "<album-folder-path>/<filename>"
 ```
 
 **Upload asset** (3-step):
@@ -186,8 +222,8 @@ sips -Z 2500 --setProperty formatOptions 85 "<album-folder-path>/<filename>.jpg"
 ```bash
 curl -s -o /dev/null -w "%{http_code}" -X PUT "https://mcp.contentful.com<uploadUrl>" \
   -H "Content-Type: image/jpeg" \
-  -H "Content-Length: $(wc -c < <album-folder-path>/<filename>.jpg)" \
-  --data-binary @<album-folder-path>/<filename>.jpg
+  -H "Content-Length: $(wc -c < <album-folder-path>/<filename>)" \
+  --data-binary @<album-folder-path>/<filename>
 ```
 Expect `204`. Stop and report if not.
 
@@ -201,7 +237,7 @@ Store asset ID. Publish it with `mcp__contentful__publish_asset`.
   - `slug`: filename without extension
   - `image`: link to asset
   - `album`: link to album entry — `{ "sys": { "type": "Link", "linkType": "Entry", "id": "<album-entry-id>" } }`
-  - `tags`: `[<category>, ...album tags]` (capitalized category derived above, plus the album's tags if present)
+  - `tagRefs`: link array from resolved tag entry IDs (photo tag + album tags, deduplicated)
 
 Publish the entry with `mcp__contentful__publish_entry` (the linked album entry doesn't need to be published yet — that happens in 3f). Report: "Created and published photo: `<slug>`."
 
