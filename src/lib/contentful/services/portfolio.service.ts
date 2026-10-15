@@ -42,7 +42,8 @@ export async function getHomePage(locale = 'de'): Promise<HomePageContent> {
     photos = photoIds
       .map((id) => byId.get(id))
       .filter((p): p is Entry<PhotoSkeleton> => p !== undefined)
-      .map((p) => toPhoto(p));
+      .map((p) => toPhoto(p))
+      .reverse();
   }
 
   return {
