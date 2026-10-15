@@ -27,7 +27,7 @@ export const Nav: FC = () => {
         <div className="flex items-center gap-4">
           <LanguageSwitch />
           <a
-            href="mailto:viktoriaferstl.foto@icloud.com"
+            href="mailto:hallo@viktoriaferstl.at"
             className="text-sm px-4 py-2 rounded-full border border-neutral-300 text-neutral-700 hover:border-neutral-900 hover:text-neutral-900 transition-colors duration-150"
           >
             {t("getInTouch")}

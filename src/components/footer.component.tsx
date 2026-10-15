@@ -18,7 +18,7 @@ export const Footer: FC = async () => {
           @viktoriaferstl.at
         </a>
         <a
-          href="mailto:viktoriaferstl.foto@icloud.com"
+          href="mailto:hallo@viktoriaferstl.at"
           className="hover:text-neutral-900 transition-colors duration-150"
         >
           {t("getInTouch")}
