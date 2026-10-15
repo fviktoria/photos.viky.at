@@ -4,7 +4,9 @@
   },
   "footer": {
     "copyright": "© 2026 Viktoria Ferstl",
-    "getInTouch": "Kontakt"
+    "getInTouch": "Kontakt",
+    "imprint": "Impressum",
+    "imprintSlug": "impressum"
   },
   "portfolio": {
     "title": "Portfolio",

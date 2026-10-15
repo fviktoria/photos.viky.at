@@ -19,5 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...albums,
     { url: `${SITE}/about`, lastModified: new Date(), priority: 0.5 },
     { url: `${SITE}/contact`, lastModified: new Date(), priority: 0.5 },
+    { url: `${SITE}/impressum`, lastModified: new Date(), priority: 0.2 },
+    { url: `${SITE}/imprint`, lastModified: new Date(), priority: 0.2 },
   ];
 }

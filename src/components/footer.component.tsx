@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { LanguageSwitch } from "@/components/language-switch.component";
 
 export const Footer: FC = async () => {
@@ -7,23 +8,31 @@ export const Footer: FC = async () => {
 
   return (
     <footer className="border-t border-neutral-100 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-neutral-400">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-neutral-400">
         <span>{t("copyright")}</span>
-        <a
-          href="https://www.instagram.com/viktoriaferstl.at"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-neutral-900 transition-colors duration-150"
-        >
-          @viktoriaferstl.at
-        </a>
-        <a
-          href="mailto:hallo@viktoriaferstl.at"
-          className="hover:text-neutral-900 transition-colors duration-150"
-        >
-          {t("getInTouch")}
-        </a>
-        <LanguageSwitch />
+        <div className="flex items-center gap-4">
+          <a
+            href="https://www.instagram.com/viktoriaferstl.at"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-neutral-900 transition-colors duration-150"
+          >
+            @viktoriaferstl.at
+          </a>
+          <a
+            href="mailto:hallo@viktoriaferstl.at"
+            className="hover:text-neutral-900 transition-colors duration-150"
+          >
+            {t("getInTouch")}
+          </a>
+          <Link
+            href={`/${t("imprintSlug")}`}
+            className="hover:text-neutral-900 transition-colors duration-150"
+          >
+            {t("imprint")}
+          </Link>
+          <LanguageSwitch />
+        </div>
       </div>
     </footer>
   );
