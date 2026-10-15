@@ -50,7 +50,7 @@ export default async function Home({ params }: Props) {
           </p>
         </div>
       </section>
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-20 w-full">
         <PortfolioSection photos={homePage.photos} tags={tags} />
       </section>
     </>

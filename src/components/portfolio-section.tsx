@@ -28,7 +28,11 @@ export const PortfolioSection: FC<Props> = ({ photos, tags }) => {
   return (
     <section aria-label="Photography portfolio">
       {visibleTags.length > 0 && (
-        <TagFilter tags={visibleTags} activeTag={activeTag} onFilter={setActiveTag} />
+        <TagFilter
+          tags={visibleTags}
+          activeTag={activeTag}
+          onFilter={setActiveTag}
+        />
       )}
       <PhotoGrid photos={filtered} id={GALLERY_ID} />
       <Lightbox galleryId={GALLERY_ID} />
